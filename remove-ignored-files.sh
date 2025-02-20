@@ -1,0 +1,6 @@
+# ...existing code or instructions...
+git rm -r --cached .
+git add .
+git commit -m "Remove files now ignored by .gitignore"
+git push
+# ...existing code...
