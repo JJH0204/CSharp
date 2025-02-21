@@ -2,36 +2,31 @@
 
 namespace CSharp
 {
-  class Box
+  class Vector2
   {
-    public string Name;
-    public int Money;
+    public int x;
+    public int y;
   }
   class Program
   {
     static void Main(string[] args)
     {
-      // (1) 인스턴스 생성 방법
-      new Box()
-      {
-        Name = "Box",
-        Money = 100
-      };
+      Vector2 obj1 = new Vector2();
+      obj1.x = 0;
+      obj1.y = 0;
 
-      // (2) 인스턴스 생성 방법
-      Box box1 = new Box()
-      {
-        Name= "Box1",
-        Money = 100
-      };
+      Vector2 obj2 = new Vector2();
+      obj2.x = 10;
+      obj2.y = 10;
 
-      // (3) 인스턴스 생성 방법
-      Box box2 = new Box();
-      box2.Name = "Box2";
-      box2.Money = 200;
+      int distance = Distance2D(obj2, obj1);
+      Console.WriteLine(distance);
+    }
 
-      Console.WriteLine("Box1 Name: " + box1.Name + " Money: " + box1.Money);
-      Console.WriteLine("Box2 Name: " + box2.Name + " Money: " + box2.Money);
+    static int Distance2D(Vector2 obj1, Vector2 obj2)
+    {
+      int distance = (int)Math.Sqrt(Math.Pow(obj2.x - obj1.x, 2) + Math.Pow(obj2.y - obj1.y, 2));
+      return distance;
     }
   }
 }

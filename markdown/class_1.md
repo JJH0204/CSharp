@@ -73,7 +73,7 @@ class Box
 
 - class 객체이름 {객체속성1; 객체속성2;} 형식으로 원하는 객체를 정의할 수 있다.
 
-### 인스턴스 생성
+### 인스턴스 변수 생성
 
 ~~~csharp
 static void Main(string[] args)
