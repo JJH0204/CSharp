@@ -131,3 +131,166 @@ static int Distance2D(Vector2 obj1, Vector2 obj2)
 여기에 상대 적인 거리를 표현하도록 코드를 수정하면 된다.
 
 이렇게 미리 메서드(함수)를 정의해 놓으면 같은 기능을 여러번 코드로 작성할 필요도 없어지고 관리도 수월해 진다.
+
+## 배열 (Array)
+
+때로는 변수를 한번에 여러개를 선언하고 관리해야할 때가 있다.
+
+어느 학급의 선생님이 되었다고 가정하고 학생 A, B, C의 국영수 시험 점수를 관리한다고 하자.
+
+그러면 학생 A의 시험 점수, B의 시험 점수, C의 시험 점수를 따로 하나하나 변수를 만들어 관리하기란 번거로운 일이다.
+
+이때 배열을 사용하게 되면 쉽게 데이터를 관리하고 활용할 수 있게 된다.
+
+~~~csharp
+private static void Main(string[] args)
+{
+  // 각 학생 별 시험 점수(국, 영, 수)
+  int[] studentA = { 80, 90, 85 };
+  int[] studentB = { 90, 95, 90 };
+  int[] studentC = { 85, 80, 80 };
+}
+~~~
+
+정수형 데이터를 저장하는 배열을 정의하고 데이터를 저장한 것을 예시로 확인할 수 있다.
+
+덕분에 관리하고 있는 학생의 시험 성적을 관리하고 활용하기 쉬워졌다.
+
+그런데 어느날 전학생이 왔다.
+
+전학생의 이름을 학생 D라고 하고, 이 학생이 아직 시험을 치루지 않아 성적을 모른다면 어떻게 해야 할까?
+
+필요한 메모리 만큼 공간을 할당만 하고 값을 저장하지 않을 수 있다.
+
+이후에 배열의 인덱스 번호를 이용해 시험 성적을 입력하고 관리할 수 있다.
+
+~~~csharp
+private static void Main(string[] args)
+{
+  // 각 학생 별 시험 점수(국, 영, 수)
+  int[] studentA = { 80, 90, 85 };
+  int[] studentB = { 90, 95, 90 };
+  int[] studentC = { 85, 80, 80 };
+
+  // 전학생 D
+  int[] studentD = new int[3];
+
+  // 학생 D의 시험 점수 입력
+  studentD[0] = 80;
+  studentD[1] = 85;
+  studentD[2] = 90;
+}
+~~~
+
+대부분의 프로그래밍 언어는 인덱스 번호를 0부터 계산한다.
+
+배열의 첫번째 요소에 접근하기 위해서는 인덱스 번호 0을 []안에 입력하면 된다.
+
+이때 주의할 점이 있다.
+
+정의된 배열의 길이를 넘어서는 인덱스 값을 입력하면 시스템에서 오류라 판단하고 컴파일 단계에서 프로그램이 정지된다.
+
+~~~csharp
+using System;
+
+namespace CSharp
+{
+  class Program
+  {
+    private static void Main(string[] args)
+    {
+      // 각 학생 별 시험 점수(국, 영, 수)
+      int[] studentA = { 80, 90, 85 };
+      int[] studentB = { 90, 95, 90 };
+      int[] studentC = { 85, 80, 80 };
+
+      // 전학생 D
+      int[] studentD = new int[3];
+
+      // 학생 D의 시험 점수 입력
+      studentD[0] = 80;
+      studentD[1] = 85;
+      studentD[2] = 90;
+      studentD[3] = 95; // 오류 발생
+    }
+  }
+}
+~~~
+
+~~~
+'Index was outside the bounds of the array.'
+~~~
+
+이 점만 유의하여 사용하면 배열은 프로그래밍에서 유용한 기능이다.
+
+## 리스트 (List)
+
+학생의 수가 3~4명으로 유지되는 경우 배열로도 충분하지만, 현실은 그렇지 않다.
+
+나 때만해도 한 반에 최소 30명 많게는 40명을 넘을 정도였다.
+
+그리고 전학생을 생각하면 그 이상의 학생 정보를 하나하나 손수 배열로 만들어 관리하는 것은 비합리적이다.
+
+이때 리스트를 사용하면 문제를 해결할 수 있다.
+
+~~~csharp
+using System;
+
+namespace CSharp
+{
+  class Program
+  {
+    private static void Main(string[] args)
+    {
+      // 각 학생 별 시험 점수(국, 영, 수)
+      int[] studentA = { 80, 90, 85 };
+      int[] studentB = { 90, 95, 90 };
+      int[] studentC = { 85, 80, 80 };
+
+      // 전학생 D
+      int[] studentD = new int[3];
+
+      // 학생 D의 시험 점수 입력
+      studentD[0] = 80;
+      studentD[1] = 85;
+      studentD[2] = 90;
+      // studentD[3] = 95; // 오류 발생
+
+      // 학생들의 시험 점수를 저장할 리스트 생성
+      List<int[]> students = new List<int[]>();
+
+      // 학생들의 시험 점수를 리스트에 추가
+      students.Add(studentA);
+      students.Add(studentB);
+      students.Add(studentC);
+      students.Add(studentD);
+
+      // 학생들의 시험 점수를 리스트에 추가(배열을 직접 생성하여 추가)
+      students.Add(new int[] { 90, 85, 80 });
+      students.Add(new int[] { 85, 90, 80 });
+
+      Console.WriteLine("학생들의 시험 점수");
+      foreach (int[] student in students)
+      {
+        Console.WriteLine($"{student[0]}, {student[1]}, {student[2]}");
+      }
+    }
+  }
+}
+~~~
+
+~~~
+학생들의 시험 점수
+80, 90, 85
+90, 95, 90
+85, 80, 80
+80, 85, 90
+90, 85, 80
+85, 90, 80
+~~~
+
+```List<자료형> 리스트이름 = 리스트 인스턴스 생성;``` 형식으로 리스트를 생성하고 관리한다.
+
+리스트에 요소를 추가하기 위해서 ```Add()```를 사용하고 추가된 요소는 리스트의 가장 마지막에 저장된다.
+
+리스트에 대한 더 상세한 내용은 다음에 다룰 예정이다.
