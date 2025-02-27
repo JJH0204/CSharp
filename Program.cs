@@ -35,9 +35,16 @@ namespace CSharp
       students.Add(new int[] { 85, 90, 80 });
 
       Console.WriteLine("학생들의 시험 점수");
-      foreach (int[] student in students)
+      // foreach문 예제
+      foreach (var student in students)
       {
         Console.WriteLine($"{student[0]}, {student[1]}, {student[2]}");
+      }
+
+      // 반복문 예제
+      for (int i = 0; i < students.Count; i++)
+      {
+        Console.WriteLine($"{students[i][0]}, {students[i][1]}, {students[i][2]}");
       }
 
       // 학생들의 시험 점수를 리스트에서 삭제
