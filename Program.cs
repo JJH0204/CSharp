@@ -1,4 +1,5 @@
 ﻿using System;
+// using System.Collections.Generic;
 
 namespace CSharp
 {
@@ -70,6 +71,14 @@ namespace CSharp
       else
       {
         Console.WriteLine("학생 E의 시험 점수가 없습니다.");
+      }
+
+      // 리스트 초기화
+      students.Clear();
+      Console.WriteLine("학생들의 시험 점수");  // 아무것도 출력되지 않음
+      foreach (int[] student in students)
+      {
+        Console.WriteLine($"{student[0]}, {student[1]}, {student[2]}");
       }
     }
   }
