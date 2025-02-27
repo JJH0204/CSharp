@@ -401,7 +401,78 @@ namespace CSharp
             }
         }
 
+        // Null 검사
+        public static void NullCheck()
+        {
+            string str = null;
 
+            {
+                // null 체크
+                // if (str == null)
+                // {
+                //     Console.WriteLine("null");
+                //     return;
+                // }
+
+                // null 또는 빈 문자열 체크
+                if (string.IsNullOrEmpty(str))
+                {
+                    Console.WriteLine("null or empty");
+                    return;
+                }
+            }
+
+            {
+                // 병합 관리 연산자 (null 조건 연산자)
+                var length = str?.Length; // null이 아닐 때만 접근
+                Console.WriteLine(length);
+
+                string str4 = str ?? "default"; // null이면 default 값으로 대체
+                Console.WriteLine(str4);
+
+                string str5 = "Hello, World!";
+                string str6 = str5 ?? "default";
+                Console.WriteLine(str6);
+            }
+
+            {
+                // nullable 형식
+                int? value = null;
+                Console.WriteLine(value.HasValue); // null인지 확인
+
+                // null을 허용하는 형식 (에러가 발생하기 쉬워서 사용을 권장하지 않음)
+            }
+        }
+
+        public static void TryCatch()
+        {
+            try
+            {
+                // int[] array = { 1, 2, 3 };
+                int[] array = null;
+                Console.WriteLine(array[2]);
+            }
+            // 널 참조 예외
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            // 배열 길이 검사를 먼저 해야함
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            // 모든 예외 처리
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                // 예외 발생 여부와 상관없이 실행
+                Console.WriteLine("예외 발생 여부와 상관없이 실행");
+            }
+        }
     }
 
     public enum Category

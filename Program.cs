@@ -11,7 +11,9 @@ namespace CSharp
       // CsharpBasic.Func_Enum();
       // CsharpBasic.Func_ValueNRefernce();
       // CsharpBasic.CallByValueNCallByReference();
-      CsharpBasic.StringFormat();
+      // CsharpBasic.StringFormat();
+      // CsharpBasic.NullCheck();
+      CsharpBasic.TryCatch();
     }
   }
 }
