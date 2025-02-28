@@ -13,3 +13,4 @@
 |25.02.27|[Class_6](./markdown/class_6.md)|(70%)#######|
 |25.02.27|[Class_7](./markdown/class_7.md)|(70%)#######|
 |25.02.27|[Class_8](./markdown/class_8.md)|(70%)#######|
+|25.02.28|[Advanced_1](./markdown/Advanced_1.md)|(70%)#######|
