@@ -161,4 +161,85 @@ foreach (Object obj in objects)
 
 - 대다수의 게임, 소프트웨어는 config 파일에 설정 값을 저장해 두고 프로그램 실행 시 불러와서 사용한다.
 - 이와 비슷하게 객체 속성, 메서드에 대한 설정을 외부에서 하고 이를 주입해서 사용할 수 있다면 사용성이 올라갈 것이라는 생각에서 시작한 방식
-- 
+- 의존성 문제를 해결해야 안전한 프로그래밍이 가능하다.
+
+## static
+
+- 메서드(또는 변수) 앞에 static 키워드가 추가되면 클래스 메서드(변수)로 분류된다.
+- 인스턴스를 만들지 않아도 클래스 맴버에 엑세스 할 수 있게 해준다.
+- 필드, 메서드, 속성, 연산자, 이벤트, 생성자 또는 클래스에 적용할 수 있다.
+
+```csharp
+public static void Static()
+{
+  Person baby = new Person("아기", new DateTime(
+    year: 2020,
+    month: 1,
+    day: 1
+  ), SEX.FEMALE);
+
+  Office.BirthReport(baby);
+}
+```
+
+- 실행결과
+
+```
+출생신고가 완료되었습니다.
+이름: 아기
+생년월일: 2020. 1. 1. 오전 12:00:00
+성별: FEMALE
+```
+
+```csharp
+public enum SEX
+{
+  MALE, FEMALE, OTHER
+}
+public class Person
+{
+  private string name;        // 이름
+  private DateTime birthDate; // 생년월일
+  private SEX sex;            // 성별
+  public string Name
+  {
+    get => name;
+    set => name = value;
+  }
+  public DateTime BirthDate
+  {
+    get => birthDate;
+    set => birthDate = value;
+  }
+  public SEX sEX
+  {
+    get => sex;
+    set => sex = value;
+  }
+  public Person(string name = "", DateTime birthDate = new DateTime(), SEX sex = SEX.OTHER)
+  {
+    this.name = name;
+    this.birthDate = birthDate;
+    this.sex = sex;
+  }
+}
+```
+
+```csharp
+public class Office
+{
+  // 출생신고
+  public static void BirthReport(Person person)
+  {
+    // person.BirthDate = DateTime.Now;
+    Console.WriteLine("출생신고가 완료되었습니다.");
+    Console.WriteLine("이름: " + person.Name);
+    Console.WriteLine("생년월일: " + person.BirthDate);
+    Console.WriteLine("성별: " + person.sEX);
+  }
+}
+```
+
+- static 선언 덕분에 인스턴스 생성 없이도 메서드를 호출해 실행할 수 있다.
+> static 선언 없으면 발생하는 에러: static이 아닌 필드, 메서드 또는 속성 'Office.BirthReport(Person)'에 개체 참조가 필요합니다.CS0120
+

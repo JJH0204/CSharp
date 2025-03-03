@@ -103,7 +103,19 @@ namespace CSharp
         #region Dependency Injection
         public static void DependencyInjection()
         {
-            
+
+        }
+        #endregion
+        #region static
+        public static void Static()
+        {
+            Person baby = new Person("아기", new DateTime(
+                year: 2020,
+                month: 1,
+                day: 1
+            ), SEX.FEMALE);
+
+            Office.BirthReport(baby);
         }
         #endregion
     }
@@ -235,4 +247,75 @@ namespace CSharp
         #endregion
     }
     #endregion
+
+    public enum SEX
+    {
+        MALE, FEMALE, OTHER
+    }
+    public class Person
+    {
+        private string name;        // 이름
+        private DateTime birthDate; // 생년월일
+        private SEX sex;            // 성별
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+        public DateTime BirthDate
+        {
+            get => birthDate;
+            set => birthDate = value;
+        }
+        public SEX sEX
+        {
+            get => sex;
+            set => sex = value;
+        }
+        public Person(string name = "", DateTime birthDate = new DateTime(), SEX sex = SEX.OTHER)
+        {
+            this.name = name;
+            this.birthDate = birthDate;
+            this.sex = sex;
+        }
+    }
+
+    // public class Student : Person
+    // {
+    //     private string school;      // 학교
+    //     private int grade;          // 학년
+    //     public string School
+    //     {
+    //         get => school;
+    //         set => school = value;
+    //     }
+    //     public int Grade
+    //     {
+    //         get => grade;
+    //         set => grade = value;
+    //     }
+    // }
+
+    // 동사무소 클래스
+    public class Office
+    {
+        // private List<Person> persons = new List<Person>();
+
+        // 출생신고
+        public void BirthReport(Person person)
+        {
+            // person.BirthDate = DateTime.Now;
+            Console.WriteLine("출생신고가 완료되었습니다.");
+            Console.WriteLine("이름: " + person.Name);
+            Console.WriteLine("생년월일: " + person.BirthDate);
+            Console.WriteLine("성별: " + person.sEX);
+        }
+
+        // 성별 확인
+        public static string CheckSex(Person person)
+        {
+            string sex = person.sEX == SEX.FEMALE ? "여성" : "남성";
+            return person.Name + "님의 성별은 " + sex +"입니다.";
+        }
+    }
 }

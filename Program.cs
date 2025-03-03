@@ -22,7 +22,8 @@ namespace CSharp
       // CSharpAdvanced.Params();
       // CSharpAdvanced.Optional();
       // CSharpAdvanced.Delegate();
-      CSharpAdvanced.Class();
+      // CSharpAdvanced.Class();
+      CSharpAdvanced.Static();
       #endregion
     }
   }
