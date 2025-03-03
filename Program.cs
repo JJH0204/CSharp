@@ -20,7 +20,9 @@ namespace CSharp
       #region CSharp-Advanced
       // CSharpAdvanced.Overloading();
       // CSharpAdvanced.Params();
-      CSharpAdvanced.Optional();
+      // CSharpAdvanced.Optional();
+      // CSharpAdvanced.Delegate();
+      CSharpAdvanced.Class();
       #endregion
     }
   }
