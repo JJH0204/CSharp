@@ -109,13 +109,43 @@ namespace CSharp
         #region static
         public static void Static()
         {
-            Person baby = new Person("아기", new DateTime(
+            Person baby = new Student("아기", new DateTime(
                 year: 2020,
                 month: 1,
                 day: 1
             ), SEX.FEMALE);
 
             Office.BirthReport(baby);
+        }
+        #endregion
+        #region deepCopy
+        public static void DeepCopy()
+        {
+            Person baby = new Student();
+            Person baby2 = baby;   // 얕은 복사
+
+            baby.Name = "아기";
+            baby2.Name = "아기2";
+
+            System.Console.WriteLine(baby.Name);
+            System.Console.WriteLine(baby2.Name);
+
+            baby2 = baby.DeepCopy();    // 깊은 복사
+
+            baby.Name = "아기";
+            baby2.Name = "아기2";
+
+            System.Console.WriteLine(baby.Name);
+            System.Console.WriteLine(baby2.Name);
+
+            Person baby3 = baby.Clone() as Person;
+
+            baby3.Name = "아기3";
+
+            System.Console.WriteLine(baby.Name);
+            System.Console.WriteLine(baby2.Name);
+            System.Console.WriteLine(baby3.Name);
+
         }
         #endregion
     }
@@ -252,8 +282,15 @@ namespace CSharp
     {
         MALE, FEMALE, OTHER
     }
-    public class Person
+    public abstract class Person
     {
+        #region subClass
+        public class Info
+        {
+            public int OptionType { get; private set; }
+            public string OptionValue { get; private set; }
+        }
+        #endregion
         private string name;        // 이름
         private DateTime birthDate; // 생년월일
         private SEX sex;            // 성별
@@ -278,23 +315,58 @@ namespace CSharp
             this.birthDate = birthDate;
             this.sex = sex;
         }
+        #region DeepCopy
+        public Person DeepCopy()
+        {
+            Person person = new Student();
+            person.name = this.name;
+            person.birthDate = this.birthDate;
+            person.sex = this.sex;
+            return person;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+        #endregion
+
+        #region abstract
+        public abstract void GrownUp();
+        #endregion
     }
 
-    // public class Student : Person
-    // {
-    //     private string school;      // 학교
-    //     private int grade;          // 학년
-    //     public string School
-    //     {
-    //         get => school;
-    //         set => school = value;
-    //     }
-    //     public int Grade
-    //     {
-    //         get => grade;
-    //         set => grade = value;
-    //     }
-    // }
+    public class Student : Person
+    {
+        private string school;      // 학교
+        private int grade;          // 학년
+        public string School
+        {
+            get => school;
+            set => school = value;
+        }
+        public int Grade
+        {
+            get => grade;
+            set => grade = value;
+        }
+
+        public Student(string name = "",DateTime birthDate = new DateTime(), SEX sex = SEX.OTHER, string school = "", int grade = 0)
+            : base
+            (
+                name,
+                birthDate,
+                sex
+            )
+        {
+            this.school = school;
+            this.grade = grade;
+            }
+        public override void GrownUp()
+        {
+            Console.WriteLine("학생이 성인이 되었습니다.");
+        }
+    }
 
     // 동사무소 클래스
     public class Office
@@ -315,7 +387,24 @@ namespace CSharp
         public static string CheckSex(Person person)
         {
             string sex = person.sEX == SEX.FEMALE ? "여성" : "남성";
-            return person.Name + "님의 성별은 " + sex +"입니다.";
+            return person.Name + "님의 성별은 " + sex + "입니다.";
+        }
+    }
+
+    public interface IObject
+    {
+        public string Name { get; set; }
+        public int Id { get; set; }
+        void Print();
+    }
+    
+    public class ExObject : IObject
+    {
+        public string Name { get; set; }
+        public int Id { get; set; }
+        public void Print()
+        {
+            Console.WriteLine("Is ExObject");
         }
     }
 }

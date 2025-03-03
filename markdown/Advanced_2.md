@@ -242,4 +242,5 @@ public class Office
 
 - static 선언 덕분에 인스턴스 생성 없이도 메서드를 호출해 실행할 수 있다.
 > static 선언 없으면 발생하는 에러: static이 아닌 필드, 메서드 또는 속성 'Office.BirthReport(Person)'에 개체 참조가 필요합니다.CS0120
-
+- 인스턴스로 생성한 변수들은 프로그램이 종료될 때까지 살아있기 때문에 버그의 원인이 될 수 있다.
+  
