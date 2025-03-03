@@ -24,7 +24,7 @@ namespace CSharp
       // CSharpAdvanced.Delegate();
       // CSharpAdvanced.Class();
       // CSharpAdvanced.Static();
-      CSharpAdvanced.DeepCopy();
+      // CSharpAdvanced.DeepCopy();
       #endregion
     }
   }
