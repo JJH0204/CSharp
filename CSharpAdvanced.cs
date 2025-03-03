@@ -302,7 +302,7 @@ namespace CSharp
         // private List<Person> persons = new List<Person>();
 
         // 출생신고
-        public void BirthReport(Person person)
+        public static void BirthReport(Person person)
         {
             // person.BirthDate = DateTime.Now;
             Console.WriteLine("출생신고가 완료되었습니다.");
