@@ -31,6 +31,10 @@ namespace CSharp
       #region CSharp-Advanced-DependencyInjection
       DI.DIMain();
       #endregion
+
+      #region CSharp-Advanced-Delegate
+      // Delegate.Main();
+      #endregion
     }
   }
 }

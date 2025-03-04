@@ -1,18 +1,18 @@
-# CSharp
- C# Basic Repository
+# C# and Unity Learning Repository
 
-## History
+이 저장소는 C# 프로그래밍 언어와 Unity 게임 엔진의 기초를 학습하기 위한 프로젝트입니다.
 
-|Date|FileName|understanding|
-|:--|:--|:--|
-|25.02.20|[Class_1](./markdown/class_1.md)|(80%)########|
-|25.02.21|[Class_2](./markdown/class_2.md)|(90%)#########|
-|25.02.27|[Class_3](./markdown/class_3.md)|(90%)#########|
-|25.02.27|[Class_4](./markdown/class_4.md)|(90%)#########|
-|25.02.27|[Class_5](./markdown/class_5.md)|(90%)#########|
-|25.02.27|[Class_6](./markdown/class_6.md)|(70%)#######|
-|25.02.27|[Class_7](./markdown/class_7.md)|(70%)#######|
-|25.02.27|[Class_8](./markdown/class_8.md)|(70%)#######|
-|25.02.28|[Advanced_1](./markdown/Advanced_1.md)|(50%)#####|
-|25.03.03|[Advanced_2](./markdown/Advanced_2.md)|(50%)#####|
-|25.03.04|[Advanced_2](./markdown/Advanced_3.md)|(50%)#####|
+## 프로젝트 구조
+
+### [CSharp_Basic](./CSharp_Basic)
+C# 프로그래밍 언어의 기초를 학습하는 섹션입니다.
+- 기본 문법과 데이터 타입
+- 객체지향 프로그래밍
+- 고급 C# 기능 (Delegate, Event, Lambda 등)
+
+### [Unity_Basic](./Unity_Basic)
+Unity 게임 엔진의 기초를 학습하는 섹션입니다.
+- Unity Editor 기본 사용법
+- GameObject와 Component 시스템
+- Unity 스크립팅 기초
+- UI 시스템과 이벤트 처리
