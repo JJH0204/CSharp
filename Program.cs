@@ -1,4 +1,5 @@
 ﻿using System;
+using CSharp.Assets;
 
 namespace CSharp
 {
@@ -25,6 +26,10 @@ namespace CSharp
       // CSharpAdvanced.Class();
       // CSharpAdvanced.Static();
       // CSharpAdvanced.DeepCopy();
+      #endregion
+
+      #region CSharp-Advanced-DependencyInjection
+      DI.DIMain();
       #endregion
     }
   }
