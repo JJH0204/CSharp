@@ -29,11 +29,13 @@ namespace CSharp
       #endregion
 
       #region CSharp-Advanced-DependencyInjection
-      DI.DIMain();
+      // DI.DIMain();
       #endregion
 
       #region CSharp-Advanced-Delegate
-      // Delegate.Main();
+      Delegate_CS delegate_CS = new Delegate_CS();
+      delegate_CS.DelegateMain();
+      // Delegate_CS.DelegateMain();
       #endregion
     }
   }
