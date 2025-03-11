@@ -33,9 +33,16 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-Delegate
-      Delegate_CS delegate_CS = new Delegate_CS();
-      delegate_CS.DelegateMain();
-      // Delegate_CS.DelegateMain();
+      // Delegate_CS delegate_CS = new Delegate_CS();
+      // delegate_CS.DelegateMain();
+      #endregion
+
+      #region CSharp-Advanced-Lambda
+      // Lambda.LambdaMain();
+      #endregion
+
+      #region CSharp-Advanced-Linq
+      Linq.LinqMain();
       #endregion
     }
   }
