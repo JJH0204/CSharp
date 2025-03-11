@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 // using Microsoft.Extensions.DependencyInjection;
 
-namespace CSharp.Assets
+namespace CSharp_Basic.Assets
 {
     public static class DI
     {

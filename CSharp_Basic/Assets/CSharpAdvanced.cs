@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 
-namespace CSharp
+namespace CSharp_Basic
 {
     public class CSharpAdvanced
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using CSharp.Assets;
+using CSharp_Basic.Assets;
 
-namespace CSharp
+namespace CSharp_Basic
 {
   class Program
   {

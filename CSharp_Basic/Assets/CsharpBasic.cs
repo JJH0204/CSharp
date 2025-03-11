@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace CSharp
+namespace CSharp_Basic
 {
     public class CsharpBasic
     {
