@@ -60,7 +60,11 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-DTO
-      DTO.DTOMain();
+      // DTO.DTOMain();
+      #endregion
+
+      #region CSharp-Advanced-Operator
+      Operator.OperatorMain();
       #endregion
     }
   }
