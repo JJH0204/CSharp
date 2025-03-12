@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CSharp_Basic.Assets;
 
 namespace CSharp_Basic
 {
   class Program
   {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
       #region CSharp-Basic
       // CsharpBasic.ArrayNList();
@@ -46,7 +47,11 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-Generic
-      Generic.GenericMain();
+      // Generic.GenericMain();
+      #endregion
+
+      #region CSharp-Advanced-Async
+      await Async.AsyncMain();
       #endregion
     }
   }
