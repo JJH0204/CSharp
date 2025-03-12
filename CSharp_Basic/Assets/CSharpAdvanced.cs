@@ -100,12 +100,6 @@ namespace CSharp_Basic
         }
         #endregion
 
-        #region Dependency Injection
-        public static void DependencyInjection()
-        {
-
-        }
-        #endregion
         #region static
         public static void Static()
         {

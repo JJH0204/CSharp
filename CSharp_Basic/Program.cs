@@ -42,7 +42,11 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-Linq
-      Linq.LinqMain();
+      // Linq.LinqMain();
+      #endregion
+
+      #region CSharp-Advanced-Generic
+      Generic.GenericMain();
       #endregion
     }
   }
