@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CSharp_Basic.Assets;
+using CSharp_Basic.Assets.DTO;
 
 namespace CSharp_Basic
 {
@@ -55,7 +56,11 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-Reflection
-      Reflection.ReflectionMain();
+      // Reflection.ReflectionMain();
+      #endregion
+
+      #region CSharp-Advanced-DTO
+      DTO.DTOMain();
       #endregion
     }
   }
