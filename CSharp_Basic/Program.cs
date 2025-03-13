@@ -68,7 +68,14 @@ namespace CSharp_Basic
       #endregion
 
       #region CSharp-Advanced-Enumerator
-      Enumerator.EnumeratorMain();
+      // Enumerator.EnumeratorMain();
+      #endregion
+
+      #region CSharp-ETC
+      ETC.ObjectMain();
+      ETC.DictionaryMain();
+      ETC.EnumControllMain();
+      ETC.StructMain();
       #endregion
     }
   }
