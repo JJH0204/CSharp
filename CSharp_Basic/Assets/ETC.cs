@@ -127,5 +127,155 @@ namespace CSharp_Basic.Assets
             ITEM_INFO iTEM_INFO1 = iTEM_INFO;                     // 값 복사가 일어난다. (인스턴스 형태가 아님)
             // int, double 같은 value 타입 자료형들은 사실 struct(구조체)이다.
         }
+
+        // 상속
+        // internal sealed class 부모클래스
+        internal class 부모클래스
+        {
+            public virtual int GetValues()
+            {
+                return 0;
+            }
+
+            // sealed 키워드로 해당 함수가 상속되는 것을 막을 수 있다.
+        }
+
+        internal class 자식클래스 : 부모클래스
+        {
+            public override int GetValues()
+            {
+                return base.GetValues();
+            }
+
+            // public new int GetValues()
+            // {
+            //     return 0;
+            // }
+            // new 키워드로 부모의 함수를 override 하지 않는 같은 이름의 다른 함수를 정의할 수 있다.
+        }
+
+        internal class 손자클래스 : 자식클래스
+        {
+            public override int GetValues()
+            {
+                return base.GetValues();
+                // 자식이 상속 받은 함수는 손자클래스에 override 할 수 있다.
+                // 이때 base = 자식클래스(손자의 부모)
+            }
+        }
+
+        // goto
+        public static void GotoMain()
+        {
+            Console.WriteLine("GOTO Main");
+            int i = 0;
+        Start:
+            Console.WriteLine($"i: {i}");
+            i++;
+            if (i < 10)
+                goto Start;
+            else
+                return;
+            // GOTO Main
+            // i: 0
+            // i: 1
+            // i: 2
+            // i: 3
+            // i: 4
+            // i: 5
+            // i: 6
+            // i: 7
+            // i: 8
+            // i: 9
+
+            //코드의 가독성을 매우 해치기 때문에 사용하지 않는 것을 권장
+        }
+
+        // sort
+        public static void SortMain()
+        {
+            Console.WriteLine("Sort Main");
+
+            List<int> ints = new List<int>();
+            Random random = new Random();
+
+            for (int i = 0; i < 10; i++)
+                ints.Add(random.Next(1, 100));
+
+            Console.WriteLine("Before Sort");
+
+            foreach (int item in ints)
+                Console.WriteLine(item);
+
+            ints.Sort();
+            Console.WriteLine("After Sort");
+            foreach (int item in ints)
+                Console.WriteLine(item);
+
+            // Class의 정렬 예제
+            List<ITEMDATA> iTEMDATAs = new List<ITEMDATA>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                int j = random.Next(1, 100);
+                iTEMDATAs.Add(new ITEMDATA(j, $"ITEM{j}"));
+            }
+
+            Console.WriteLine("Before Sort");
+            foreach (ITEMDATA item in iTEMDATAs)
+                Console.WriteLine(item.ID + ", " + item.Name);
+
+            // 클래스의 경우 Sort() 함수로 정렬이 힘들가(가능은 할까?)
+            // 별도의 인터페이스를 구현해 정렬 기능을 정의해야 한다.
+            iTEMDATAs.Sort(new ITEMDATAComparer());
+
+            Console.WriteLine("After Sort");
+            foreach (ITEMDATA item in iTEMDATAs)
+                Console.WriteLine(item.ID + ", " + item.Name);
+        }
+
+        class ITEMDATA
+        {
+            public readonly int ID;
+            public readonly string Name;
+
+            public ITEMDATA(int iD, string name)
+            {
+                ID = iD;
+                Name = name;
+            }
+        }
+
+        // 인터페이스 선언
+        class ITEMDATAComparer : IComparer<ITEMDATA>
+        {
+            public int Compare(ITEMDATA? x, ITEMDATA? y)
+            {
+                return x.ID.CompareTo(y.ID);
+            }
+        }
+
+        public static void ArrayMain()
+        {
+            Console.WriteLine("Array Main");
+            // int[,] arrDemension = new int[3, 3];
+            int[,] arrDemension =
+            {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+            };
+            Console.WriteLine(arrDemension[1, 2]);
+
+            // 가변 배열
+            int[][] arrD = new int[3][];
+            arrD[0] = new int[3] { 1, 2, 3 };
+            arrD[1] = new int[4] { 1, 2, 3, 4 };
+            arrD[2] = new int[] { 1, 2 };
+
+            Console.WriteLine(arrDemension.Length);         // 배열 전체 요소 개수
+            Console.WriteLine(arrDemension.GetLength(0));   // 행 개수 (3)
+            Console.WriteLine(arrDemension.GetLength(1));   // 열 개수 (3)
+        }
     }
 }

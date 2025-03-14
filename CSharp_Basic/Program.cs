@@ -76,6 +76,9 @@ namespace CSharp_Basic
       ETC.DictionaryMain();
       ETC.EnumControllMain();
       ETC.StructMain();
+      ETC.GotoMain();
+      ETC.SortMain();
+      ETC.ArrayMain();
       #endregion
     }
   }
