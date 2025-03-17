@@ -399,7 +399,7 @@ namespace CSharp_Basic.Assets
 
             // 확장 메서드
             int a = 1;
-            Console.WriteLine(a.Power());
+            // Console.WriteLine(a.Power());
             Console.WriteLine(100.Power(3));
         }
 
