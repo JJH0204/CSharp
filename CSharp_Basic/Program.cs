@@ -79,6 +79,7 @@ namespace CSharp_Basic
       ETC.GotoMain();
       ETC.SortMain();
       ETC.ArrayMain();
+      EXDispose.DisposeMain();
       #endregion
     }
   }
