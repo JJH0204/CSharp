@@ -15,3 +15,4 @@ obj/
 # 기타 불필요한 파일
 *.log
 *.lock.json
+.DS_Store

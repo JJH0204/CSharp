@@ -1,0 +1,91 @@
+# Unity 빌드 결과물 및 임시 파일
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+
+# Unity의 자동 생성된 메타 데이터 파일
+# (강제 포함이 필요한 경우 제외 가능)
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.csproj
+*.unityproj
+*.asset
+*.pidb
+*.sln
+*.suo
+*.svd
+*.sln*
+*.unitypackage
+
+# Lightmap, NavMesh 및 GI 캐시
+[Ll]ightmapSnapshot
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.meta
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.bin
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.manifest
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.pdb
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resS
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resource
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.assets
+
+# Rider, VSCode 및 기타 IDE 관련 파일
+.vscode/
+.idea/
+*.sln*
+*.csproj
+*.unityproj
+*.tmp
+*.bak
+*.swp
+*.lock
+*.log
+*.git/
+*.tmp/
+
+# MacOS 관련 파일
+.DS_Store
+._*
+
+# Windows 관련 파일
+Thumbs.db
+Desktop.ini
+
+# 빌드된 실행 파일
+*.apk
+*.aab
+*.exe
+*.app
+*.xcodeproj
+*.xcworkspace
+*.ipa
+
+# 플러그인 및 패키지
+Packages/*/
+!Packages/manifest.json
+!Packages/packages-lock.json
+
+# 유니티 Collaborate / Plastic SCM 관련 파일 (협업 도구 사용 시 필요)
+.collab/
+*.plastic/
+*.plasticignore
+
+# PlayerPrefs (로컬 설정 관련 파일)
+ProjectSettings/EditorBuildSettings.asset
+ProjectSettings/TagManager.asset
+ProjectSettings/ProjectVersion.txt
+
+# Git LFS를 사용할 경우 (대용량 파일 관리)
+# *.psd
+# *.fbx
+# *.wav
+# *.mp4
+# *.mov
+# *.tga
+# *.tif
+# *.exr
