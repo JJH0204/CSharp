@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerB : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
+    // [SerializeField]
+    // GameObject gameObject;
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Hello World! - B Start");
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    public void Attack()
+    {
+        Debug.Log($"{gameObject.name} Attack!");
     }
 }
