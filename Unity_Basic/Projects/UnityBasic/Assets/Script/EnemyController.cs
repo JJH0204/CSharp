@@ -11,7 +11,12 @@ public class EnemyController : MonoBehaviour
 
     // private PlayerController playerController; // cache
 
-    [SerializeField] private LayerMask layerMask; // 레이어 마스크
+    [SerializeField] private LayerMask layerMask;   // 레이어 마스크
+    [SerializeField] private Transform tTarget;     // 타겟
+    private Vector3 vOriginPos;                     // 원점
+    private float fFactor;
+    private int iDgree = 0;                         // 각도
+
 
     void Start()
     {
@@ -20,6 +25,9 @@ public class EnemyController : MonoBehaviour
         // Debug.Log(playerController.gameObject.name);
 
         InitLayerMask();
+
+        vOriginPos = gameObject.transform.position; // 원점을 설정한다.
+        // tTarget = FindAnyObjectByType<PlayerController>().transform; // 타겟을 설정한다.
     }
 
     private void InitLayerMask()
@@ -36,9 +44,23 @@ public class EnemyController : MonoBehaviour
         // LookAtPlayerUseCache();
         // LookAtPlayerUsePhysics();
 
+        // RotateWithRaycast();
 
-        RotateWithRaycast();
+        // MovementUseTrigonometric(); // 삼각함수를 이용한 이동
+        fFactor += Time.deltaTime;
+        gameObject.transform.position = Vector3.Lerp(vOriginPos, tTarget.position, fFactor); // Lerp 함수를 이용해 원점과 타겟 사이를 이동한다.
+    }
 
+    private void MovementUseTrigonometric()
+    {
+        ///<summary>
+        /// 삼각함수를 이용한 좌우 페트롤 이동
+        ///</summary>
+
+        // Debug.Log(Mathf.Cos(Mathf.Deg2Rad * 60)); // Cos 함수는 라디안 값을 받는다. 따라서 Deg2Rad를 이용해 각도를 라디안으로 변환한다.
+        // transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * iDgree), gameObject.transform.position.y, 0);
+        transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * iDgree), gameObject.transform.position.y, Mathf.Sin(Mathf.Deg2Rad * iDgree));    // Sin 파와 Cos 파를 이용해 원운동을 한다.
+        iDgree++; // 5도씩 증가시킨다.
     }
 
     private void RotateWithRaycast()
