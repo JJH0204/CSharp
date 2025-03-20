@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefeb; // 프리팹을 이용해 오브젝트를 생성합니다.
+    [SerializeField] private int enemyCount = 4; // 적의 수
     private List<EnemyController> enemyControllers = new List<EnemyController>();     // 직접 연결하여 속도가 빠릅니다.
 
     // 외부에서 접근할 수 있도록 프로퍼티를 사용합니다.
@@ -20,7 +21,7 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < 4; i++) // 반복문으로 적 4마리를 생성합니다.
+        for (int i = 0; i < enemyCount; i++) // 반복문으로 적 4마리를 생성합니다.
         {
             GameObject gameObject = Instantiate(enemyPrefeb, this.gameObject.transform);    // 프리팹을 이용해 오브젝트를 생성합니다.
                                                                                             // EnemyController 의 자식으로 생성
@@ -56,6 +57,12 @@ public class EnemyManager : MonoBehaviour
         // {
         //     Debug.Log(enemyController.gameObject.name);
         // }
+
+        // 생성한 적을 일정 간격으로 배치한다.
+        for (int i = 0; i < enemyControllers.Count; i++)
+        {
+            enemyControllers[i].transform.position = new Vector3(i * 2, 0, 0);
+        }
     }
 
     // Update is called once per frame
