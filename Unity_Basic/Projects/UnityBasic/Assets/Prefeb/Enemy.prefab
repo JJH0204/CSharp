@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 584665658289258005}
   - component: {fileID: 6209387981974184638}
   - component: {fileID: 2537895810757789888}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -122,6 +122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b9cba754bb1f7f47ac8324f3f1729b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!54 &2537895810757789888
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,7 +163,7 @@ GameObject:
   - component: {fileID: 6158603337339848006}
   - component: {fileID: 2229608433649804100}
   - component: {fileID: 6412302591658228247}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
