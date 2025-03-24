@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefeb; // 프리팹을 이용해 오브젝트를 생성합니다.
+    [SerializeField] private GameObject enemyMoveTarget; // 적의 이동 타겟
     [SerializeField] private int enemyCount = 4; // 적의 수
     private List<EnemyController> enemyControllers = new List<EnemyController>();     // 직접 연결하여 속도가 빠릅니다.
 
@@ -27,6 +28,7 @@ public class EnemyManager : MonoBehaviour
                                                                                             // EnemyController 의 자식으로 생성
             EnemyController enemyController = gameObject.GetComponent<EnemyController>();   // EnemyController 컴포넌트를 가져옵니다.
             enemyControllers.Add(enemyController); // 리스트에 추가합니다.
+            enemyController.SetTarget(enemyMoveTarget.transform); // 적의 이동 타겟을 설정합니다.
         }
         // Debug.Log(gameObject.name); // 현재 스크립트가 붙어있는 게임 오브젝트의 이름을 반환합니다.
 

@@ -46,17 +46,26 @@ public class EnemyController : MonoBehaviour
 
         // RotateWithRaycast();
 
-        // MovementUseTrigonometric(); // 삼각함수를 이용한 이동
-        fFactor += Time.deltaTime;
+        // MovementUseTrigonometric();
+        MovementUseLinearInterpolation();
+    }
+
+    // 선형보간을 이용한 이동
+    private void MovementUseLinearInterpolation()
+    {
+        fFactor += Time.deltaTime;  // fFactor = 0 - 1 사이의 값 (0: 원점, 1: 타겟)
         gameObject.transform.position = Vector3.Lerp(vOriginPos, tTarget.position, fFactor); // Lerp 함수를 이용해 원점과 타겟 사이를 이동한다.
+
+        // 이 방식은 타겟 설정을 외부에서 받아야 하기 때문에 씬에 오브젝트를 올려서 설정해야 한다. (단점)
+    }
+
+    public void SetTarget(Transform tTarget)
+    {
+        this.tTarget = tTarget;
     }
 
     private void MovementUseTrigonometric()
     {
-        ///<summary>
-        /// 삼각함수를 이용한 좌우 페트롤 이동
-        ///</summary>
-
         // Debug.Log(Mathf.Cos(Mathf.Deg2Rad * 60)); // Cos 함수는 라디안 값을 받는다. 따라서 Deg2Rad를 이용해 각도를 라디안으로 변환한다.
         // transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * iDgree), gameObject.transform.position.y, 0);
         transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * iDgree), gameObject.transform.position.y, Mathf.Sin(Mathf.Deg2Rad * iDgree));    // Sin 파와 Cos 파를 이용해 원운동을 한다.
