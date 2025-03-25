@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 // using System.Numerics;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,27 +17,37 @@ public class EnemyController : MonoBehaviour
     private Vector3 vOriginPos;                     // 원점
     private float fFactor;
     private int iDgree = 0;                         // 각도
-    // private int iIndexMove;
-    // private bool isFinished;
+                                                    // private int iIndexMove;
+                                                    // private bool isFinished;
 
     // IEnumerator Start()
+    
+    PlayerController playerController;
+    NavMeshAgent navmashAgent;
+
     void Start()
     {
+        #region
         // playerController = FindAnyObjectByType<PlayerController>(); // PlayerController를 찾아서 가져온다.
 
         // Debug.Log(playerController.gameObject.name);
 
-        InitLayerMask();
+        // InitLayerMask();
 
-        vOriginPos = gameObject.transform.position; // 원점을 설정한다.
-                                                    // tTarget = FindAnyObjectByType<PlayerController>().transform; // 타겟을 설정한다.
+        // vOriginPos = gameObject.transform.position; // 원점을 설정한다.
+        // tTarget = FindAnyObjectByType<PlayerController>().transform; // 타겟을 설정한다.
 
         // yield return StartCoroutine(CoroutineMoveRight());   // 코루틴 함수 실행 방법
         // yield return new WaitForSeconds(5f); // 1초 대기
         // yield return StartCoroutine(CoroutineMoveDown());
 
         // gameObject.transform.position = new Vector3(0, 0, 5);            // 월드 좌표계를 이용해 이동동
-        gameObject.transform.position = transform.TransformPoint(0, 0, 5);  // 로컬 좌표계를 이용해 이동
+        // gameObject.transform.position = transform.TransformPoint(0, 0, 5);  // 로컬 좌표계를 이용해 이동
+        #endregion
+        
+        // using cache
+        playerController = FindAnyObjectByType<PlayerController>(); // PlayerController를 찾아서 가져온다.
+        navmashAgent = GetComponent<NavMeshAgent>();                // NavMeshAgent 컴포넌트를 가져온다.
     }
 
     private void InitLayerMask()
@@ -50,6 +61,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        #region
         // LookAtPlayerUseCache();
         // LookAtPlayerUsePhysics();
 
@@ -73,6 +85,9 @@ public class EnemyController : MonoBehaviour
         //     gameObject.transform.Translate(0, 0, -1);
         // }
         // 복잡한 이동 패턴을 코루틴을 이용해 구현
+        #endregion
+
+        navmashAgent.SetDestination(playerController.transform.position); // NavMeshAgent를 이용해 플레이어의 위치를 갱신 및 추적
     }
 
     IEnumerator CoroutineMoveRight()
