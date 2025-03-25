@@ -88,6 +88,8 @@ public class EnemyController : MonoBehaviour
         #endregion
 
         navmashAgent.SetDestination(playerController.transform.position); // NavMeshAgent를 이용해 플레이어의 위치를 갱신 및 추적
+
+        LookAtPlayerUsePhysics(); // Physics를 이용해 플레이어를 바라본다. (공격)
     }
 
     IEnumerator CoroutineMoveRight()
@@ -179,13 +181,13 @@ public class EnemyController : MonoBehaviour
 
     private void LookAtPlayerUsePhysics()
     {
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 5f); // 반경 5f 안에 있는 모든 콜라이더를 반환한다.
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 1f); // 반경 5f 안에 있는 모든 콜라이더를 반환한다.
         foreach (Collider collider in colliders)
         {
             if (collider.gameObject.tag == "Player")
             {
-                gameObject.transform.LookAt(collider.transform.position); // 플레이어를 바라보게 한다.
-                collider.GetComponent<PlayerController>().Warning();     // 플레이어에게 경고한다.
+                // gameObject.transform.LookAt(collider.transform.position); // 플레이어를 바라보게 한다.
+                collider.GetComponent<PlayerController>().Attack();     // 플레이어에게 공격한다.
             }
         }
     }

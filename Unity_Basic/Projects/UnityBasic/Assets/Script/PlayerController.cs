@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     float fYRotation = 0f; // Y축 회전값
     float fXRotation = 0f; // X축 회전값
+    CameraShake cameraShake; // cache
 
     // Start is called before the first frame update
     void Start()
@@ -21,16 +22,18 @@ public class PlayerController : MonoBehaviour
         Application.targetFrameRate = 60;   // 프레임 제한 (60fps)
                                             // Debug.Log("Hello World! - A Start");  // 콘솔에 출력 (시작시 한번만 출력)
 
-                                            // enemyManager = FindObjectOfType<EnemyManager>(); // EnemyManager를 찾아서 가져온다. (직접 연결해서 사용할 수 없을 때 사용)
-                                            // enemyManager = FindAnyObjectByType<EnemyManager>(); // FindObjectOfType의 개선 버전전
-                                            // enemyManager.AttackAll();       // EnemyManager의 AttackAll 함수 호출
+        // enemyManager = FindObjectOfType<EnemyManager>(); // EnemyManager를 찾아서 가져온다. (직접 연결해서 사용할 수 없을 때 사용)
+        // enemyManager = FindAnyObjectByType<EnemyManager>(); // FindObjectOfType의 개선 버전전
+        // enemyManager.AttackAll();       // EnemyManager의 AttackAll 함수 호출
 
-                                            // 게임 오브젝트의 위치를 수정할 수 있다.
-                                            // Debug.Log(gameObject.transform.position);
-                                            // gameObject.transform.position = new Vector3(0, 0, 0); // 위치 변경
-                                            // Debug.Log(gameObject.transform.position);
-        
+        // 게임 오브젝트의 위치를 수정할 수 있다.
+        // Debug.Log(gameObject.transform.position);
+        // gameObject.transform.position = new Vector3(0, 0, 0); // 위치 변경
+        // Debug.Log(gameObject.transform.position);
+
         enemyManager = FindAnyObjectByType<EnemyManager>(); // EnemyManager를 찾아서 가져온다.
+
+        cameraShake = FindAnyObjectByType<CameraShake>(); // CameraShake를 찾아서 가져온다.
     }
 
     // Update is called once per frame
@@ -132,7 +135,7 @@ public class PlayerController : MonoBehaviour
         float fMouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * 100; // 마우스 좌우 이동
         float fMouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * 500; // 마우스 상하 이동
 
-        Debug.Log($"Mouse X: {fMouseX}, Mouse Y: {fMouseY}");
+        // Debug.Log($"Mouse X: {fMouseX}, Mouse Y: {fMouseY}");
 
         // 마우스 움직임을 통해 화면을 움직이려면 Y축을 회전시켜야 한다.
 
@@ -179,5 +182,12 @@ public class PlayerController : MonoBehaviour
     public void Warning()
     {
         Debug.Log("Warning!");
+    }
+
+    public void Attack()
+    {
+        Debug.Log("Attack!");
+        
+        cameraShake.Shake(0.1f, 0.5f); // 카메라 쉐이크
     }
 }
