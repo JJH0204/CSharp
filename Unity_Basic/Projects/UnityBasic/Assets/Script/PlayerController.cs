@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
 
     private bool bIsJumping = false; // 점프 중인지 확인
 
+    float fYRotation = 0f; // Y축 회전값
+    float fXRotation = 0f; // X축 회전값
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,9 +36,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // UpdateTransform();   // Transform.Position을 이용해 이동
-        UpdateRigidbody();      // Rigidbody를 이용해 이동
+        // UpdateTransform();       // Transform.Position을 이용해 이동
+        // UpdateRigidbody();       // Rigidbody를 이용해 이동
+        MoveFinal();
         Jump();                 // Rigidbody를 이용한 점프
+        MouseControll();        // 마우스 컨트롤
 
         // UseCache4Attack(); // Cache를 이용한 공격
         UsePhysics4Attack(); // Physics를 이용한 공격
@@ -110,6 +115,34 @@ public class PlayerController : MonoBehaviour
         Vector3 vMoveNormalized = vMove.normalized * fSpeed; // 정규화된 벡터값 // Time.deltaTime을 곱하지 않는다.
 
         rBody.velocity = new Vector3(vMoveNormalized.x, rBody.velocity.y, vMoveNormalized.z); // 속도 적용
+    }
+
+    private void MoveFinal()
+    {
+        float fHorizontal = Input.GetAxis("Horizontal"); // 좌우 이동
+        float fVertical = Input.GetAxis("Vertical"); // 상하 이동
+
+        Vector3 vMov = new Vector3(fHorizontal, 0, fVertical);
+        Vector3 vWorldPos = transform.TransformDirection(vMov);                     // 로컬 좌표계를 월드 좌표계로 변환
+        transform.Translate(vWorldPos * Time.deltaTime * fSpeed, Space.World);      // 이동
+    }
+
+    private void MouseControll()
+    {
+        float fMouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * 100; // 마우스 좌우 이동
+        float fMouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * 500; // 마우스 상하 이동
+
+        Debug.Log($"Mouse X: {fMouseX}, Mouse Y: {fMouseY}");
+
+        // 마우스 움직임을 통해 화면을 움직이려면 Y축을 회전시켜야 한다.
+
+        fYRotation += fMouseX; // Y축 회전값 계산
+        fXRotation -= fMouseY; // X축 회전값 계산
+
+        // x축 회전값을 제한한다.( 90도 ~ -90도 )
+        Mathf.Clamp(fXRotation, -90, 90);
+
+        gameObject.transform.rotation = Quaternion.Euler(fXRotation, fYRotation, 0); // 회전값 적용
     }
 
     private void Jump()
