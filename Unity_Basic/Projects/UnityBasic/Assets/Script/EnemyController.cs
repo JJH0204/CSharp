@@ -16,8 +16,10 @@ public class EnemyController : MonoBehaviour
     private Vector3 vOriginPos;                     // 원점
     private float fFactor;
     private int iDgree = 0;                         // 각도
+    // private int iIndexMove;
+    // private bool isFinished;
 
-
+    // IEnumerator Start()
     void Start()
     {
         // playerController = FindAnyObjectByType<PlayerController>(); // PlayerController를 찾아서 가져온다.
@@ -27,7 +29,14 @@ public class EnemyController : MonoBehaviour
         InitLayerMask();
 
         vOriginPos = gameObject.transform.position; // 원점을 설정한다.
-        // tTarget = FindAnyObjectByType<PlayerController>().transform; // 타겟을 설정한다.
+                                                    // tTarget = FindAnyObjectByType<PlayerController>().transform; // 타겟을 설정한다.
+
+        // yield return StartCoroutine(CoroutineMoveRight());   // 코루틴 함수 실행 방법
+        // yield return new WaitForSeconds(5f); // 1초 대기
+        // yield return StartCoroutine(CoroutineMoveDown());
+
+        // gameObject.transform.position = new Vector3(0, 0, 5);            // 월드 좌표계를 이용해 이동동
+        gameObject.transform.position = transform.TransformPoint(0, 0, 5);  // 로컬 좌표계를 이용해 이동
     }
 
     private void InitLayerMask()
@@ -47,7 +56,54 @@ public class EnemyController : MonoBehaviour
         // RotateWithRaycast();
 
         // MovementUseTrigonometric();
-        MovementUseLinearInterpolation();
+        // MovementUseLinearInterpolation();
+
+        // 코루틴을 이용한 ㄱ자 이동
+        // if (iIndexMove <= 3)
+        // {
+        //     gameObject.transform.Translate(1, 0, 0);
+        //     iIndexMove++;
+        // }
+        // else
+        // {
+        //     isFinished = true;
+        // }
+        // if (isFinished)
+        // {
+        //     gameObject.transform.Translate(0, 0, -1);
+        // }
+        // 복잡한 이동 패턴을 코루틴을 이용해 구현
+    }
+
+    IEnumerator CoroutineMoveRight()
+    {
+        yield return null;      // 다음 프레임까지 대기
+        gameObject.transform.Translate(1, 0, 0);
+        yield return null;
+        gameObject.transform.Translate(1, 0, 0);
+        yield return null;
+        gameObject.transform.Translate(1, 0, 0);
+
+        int iCount = 0;
+        while (true)    // 프레임 단위로 반복복
+        {
+            if (iCount >= 3)    // 조건이 충족되면 코루틴 종료
+            {
+                yield break;
+            }
+            gameObject.transform.Translate(0, 0, 1);
+            yield return null;
+        }
+    }
+
+    IEnumerator CoroutineMoveDown()
+    {
+        yield return new WaitForSeconds(1f); // 1초 대기
+        gameObject.transform.Translate(0, 0, -1);
+        yield return new WaitForSeconds(2f);
+        gameObject.transform.Translate(0, 0, -1);
+        yield return new WaitForSeconds(3f);
+        gameObject.transform.Translate(0, 0, -1);
     }
 
     // 선형보간을 이용한 이동
