@@ -23,8 +23,34 @@ public class CubePlay : MonoBehaviour
 
         // HardAnimaitor(fHorizontal, fVertical);
         SimpleAnimaitor(fHorizontal, fVertical);
+        UseBGMBox();
 
         gameObject.transform.localPosition = v3OriginPosition;
+    }
+
+    private void UseBGMBox()
+    {
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 1f);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject.tag == "BGM")
+            {
+                // Debug.Log("BGM Box");
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    collider.GetComponent<BGMPlay>().PlayBGM();
+                }
+                else if (Input.GetKeyDown(KeyCode.T))
+                {
+                    collider.GetComponent<BGMPlay>().ChangeBGM();
+                }
+                else if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    collider.GetComponent<BGMPlay>().StopBGM();
+                }
+            }
+        }
     }
 
     private void SimpleAnimaitor(float fHorizontal, float fVertical)
