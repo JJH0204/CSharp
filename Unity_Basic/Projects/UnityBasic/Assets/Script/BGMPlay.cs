@@ -21,26 +21,81 @@ public class BGMPlay : MonoBehaviour
         {
             audioSource.clip = audioClips[nCurrentIndex];
             audioSource.Play();
+            FadeIn();
         }
     }
 
     public void ChangeBGM()
     {
-        nCurrentIndex++;
-        if (audioClips.Length <= nCurrentIndex)
+        if (audioSource.isPlaying)
         {
-            nCurrentIndex = 0;
+            nCurrentIndex++;
+            if (audioClips.Length <= nCurrentIndex)
+            {
+                nCurrentIndex = 0;
+            }
+            PlayBGM();
         }
-        PlayBGM();
     }
 
     public void StopBGM()
     {
+        FadeOut();
         audioSource.Stop();
     }
 
     public bool IsPlaying()
     {
         return audioSource.isPlaying;
+    }
+
+    private void FadeOut()
+    {
+        StartCoroutine(CoroutineFadeOut());
+    }
+
+    private IEnumerator CoroutineFadeOut()
+    {
+        float fTime = 0;
+
+        while (true)
+        {
+            fTime += Time.deltaTime;
+
+            if (fTime > 3f)
+            {
+                audioSource.volume = 0;
+                break;
+            }
+
+            audioSource.volume -= 0.005f;
+
+            yield return null;
+        }
+    }
+
+    private void FadeIn()
+    {
+        StartCoroutine(CoroutineFadeIn());
+    }
+
+    private IEnumerator CoroutineFadeIn()
+    {
+        float fTime = 0;
+
+        while (true)
+        {
+            fTime += Time.deltaTime;
+
+            if (fTime > 3f)
+            {
+                audioSource.volume = 1;
+                break;
+            }
+
+            audioSource.volume += 0.005f;
+
+            yield return null;
+        }
     }
 }
