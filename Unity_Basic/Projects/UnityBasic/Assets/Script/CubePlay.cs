@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum CUBE_PLAY_STATE
 {
     IDLE,
@@ -22,12 +21,26 @@ public class CubePlay : MonoBehaviour
 
     // [SerializeField] private float fSpeed = 10f; // 속도
 
+    public bool IsMove
+    {
+        get
+        {
+            return eCubePlayState != CUBE_PLAY_STATE.ATTACK;
+        }
+    }
+
+    public bool IsIdle
+    {
+        get
+        {
+            return eCubePlayState == CUBE_PLAY_STATE.ATTACK;
+        }
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
         v3OriginPosition = gameObject.transform.localPosition;
-
-
     }
 
     void Update()
@@ -60,22 +73,23 @@ public class CubePlay : MonoBehaviour
             ChangeState(CUBE_PLAY_STATE.IDLE);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && eCubePlayState != CUBE_PLAY_STATE.ATTACK)
+        if (Input.GetKeyDown(KeyCode.Z) && eCubePlayState != CUBE_PLAY_STATE.ATTACK)
         {
             ChangeState(CUBE_PLAY_STATE.ATTACK);
         }
 
-        UpdateState();
+        gameObject.transform.localPosition = v3OriginPosition;
 
         UseBGMBox();
-
-        gameObject.transform.localPosition = v3OriginPosition;
     }
 
     private void UpdateState()
     {
         switch (eCubePlayState)
         {
+            case CUBE_PLAY_STATE.IDLE:
+                animator.Play("Idle");
+                break;
             case CUBE_PLAY_STATE.MOVE_FRONT:
                 animator.Play("MoveFront");
                 break;
@@ -88,35 +102,32 @@ public class CubePlay : MonoBehaviour
             case CUBE_PLAY_STATE.MOVE_RIGHT:
                 animator.Play("MoveRight");
                 break;
-        }
-    }
-
-    private void ChangeState(CUBE_PLAY_STATE eState)
-    {
-        eCubePlayState = eState;
-
-        switch (eCubePlayState)
-        {
-            case CUBE_PLAY_STATE.IDLE:
-                animator.Play("Idle");
-                break;
-            // case CUBE_PLAY_STATE.MOVE_FRONT:
-            //     // animator.Play("MoveFront");
-            //     break;
-            // case CUBE_PLAY_STATE.MOVE_BACK:
-            //     // animator.Play("MoveBack");
-            //     break;
-            // case CUBE_PLAY_STATE.MOVE_LEFT:
-            //     // animator.Play("MoveLeft");
-            //     break;
-            // case CUBE_PLAY_STATE.MOVE_RIGHT:
-            //     // animator.Play("MoveRight");
-            //     break;
             case CUBE_PLAY_STATE.ATTACK:
                 animator.Play("Attack");
                 StartCoroutine(CoroutineAttackFSM());
                 break;
         }
+    }
+
+    private void ChangeState(CUBE_PLAY_STATE eState)
+    {
+        if (eCubePlayState == eState) return; // 상태가 동일하면 변경하지 않음
+        eCubePlayState = eState;
+        UpdateState(); // 상태 변경 후 즉시 업데이트
+    }
+
+    private IEnumerator CoroutineAttackFSM()
+    {
+        // 애니메이션이 시작될 때까지 한 프레임 대기
+        yield return null;
+
+        // 현재 애니메이션 상태 정보 가져오기
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // 애니메이션 길이만큼 대기
+        yield return new WaitForSeconds(stateInfo.length);
+
+        ChangeState(CUBE_PLAY_STATE.IDLE); // 상태 전환 시 ChangeState 호출
     }
 
     private void UseBGMBox()
@@ -188,12 +199,6 @@ public class CubePlay : MonoBehaviour
         bIsAttack = false;
     }
 
-    private IEnumerator CoroutineAttackFSM()
-    {
-        yield return new WaitForSeconds(0.5f);
-        eCubePlayState = CUBE_PLAY_STATE.IDLE;
-    }
-
     private void HardAnimaitor(float fHorizontal, float fVertical)
     {
         if (fVertical > 0)
@@ -241,6 +246,4 @@ public class CubePlay : MonoBehaviour
             animator.SetTrigger("IsAttack");
         }
     }
-
-
 }
