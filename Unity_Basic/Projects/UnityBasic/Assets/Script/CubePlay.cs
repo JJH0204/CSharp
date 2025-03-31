@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum CUBE_PLAY_STATE
+{
+    IDLE,
+    MOVE_FRONT,
+    MOVE_BACK,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    ATTACK
+}
+
 public class CubePlay : MonoBehaviour
 {
     private Animator animator; // cache
     private bool bIsAttack = false; // 공격 중인지 확인
     private Vector3 v3OriginPosition; // 초기 위치
-    
+    private CUBE_PLAY_STATE eCubePlayState = CUBE_PLAY_STATE.IDLE; // 현재 상태
 
     // [SerializeField] private float fSpeed = 10f; // 속도
 
@@ -16,7 +27,7 @@ public class CubePlay : MonoBehaviour
         animator = GetComponent<Animator>();
         v3OriginPosition = gameObject.transform.localPosition;
 
-        
+
     }
 
     void Update()
@@ -25,10 +36,87 @@ public class CubePlay : MonoBehaviour
         float fVertical = Input.GetAxis("Vertical");
 
         // HardAnimaitor(fHorizontal, fVertical);
-        SimpleAnimaitor(fHorizontal, fVertical);
+        // SimpleAnimaitor(fHorizontal, fVertical);
+
+        // Use FSM
+        if (fVertical > 0)
+        {
+            ChangeState(CUBE_PLAY_STATE.MOVE_FRONT);
+        }
+        else if (fVertical < 0)
+        {
+            ChangeState(CUBE_PLAY_STATE.MOVE_BACK);
+        }
+        else if (fHorizontal > 0)
+        {
+            ChangeState(CUBE_PLAY_STATE.MOVE_RIGHT);
+        }
+        else if (fHorizontal < 0)
+        {
+            ChangeState(CUBE_PLAY_STATE.MOVE_LEFT);
+        }
+        else
+        {
+            ChangeState(CUBE_PLAY_STATE.IDLE);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && eCubePlayState != CUBE_PLAY_STATE.ATTACK)
+        {
+            ChangeState(CUBE_PLAY_STATE.ATTACK);
+        }
+
+        UpdateState();
+
         UseBGMBox();
 
         gameObject.transform.localPosition = v3OriginPosition;
+    }
+
+    private void UpdateState()
+    {
+        switch (eCubePlayState)
+        {
+            case CUBE_PLAY_STATE.MOVE_FRONT:
+                animator.Play("MoveFront");
+                break;
+            case CUBE_PLAY_STATE.MOVE_BACK:
+                animator.Play("MoveBack");
+                break;
+            case CUBE_PLAY_STATE.MOVE_LEFT:
+                animator.Play("MoveLeft");
+                break;
+            case CUBE_PLAY_STATE.MOVE_RIGHT:
+                animator.Play("MoveRight");
+                break;
+        }
+    }
+
+    private void ChangeState(CUBE_PLAY_STATE eState)
+    {
+        eCubePlayState = eState;
+
+        switch (eCubePlayState)
+        {
+            case CUBE_PLAY_STATE.IDLE:
+                animator.Play("Idle");
+                break;
+            // case CUBE_PLAY_STATE.MOVE_FRONT:
+            //     // animator.Play("MoveFront");
+            //     break;
+            // case CUBE_PLAY_STATE.MOVE_BACK:
+            //     // animator.Play("MoveBack");
+            //     break;
+            // case CUBE_PLAY_STATE.MOVE_LEFT:
+            //     // animator.Play("MoveLeft");
+            //     break;
+            // case CUBE_PLAY_STATE.MOVE_RIGHT:
+            //     // animator.Play("MoveRight");
+            //     break;
+            case CUBE_PLAY_STATE.ATTACK:
+                animator.Play("Attack");
+                StartCoroutine(CoroutineAttackFSM());
+                break;
+        }
     }
 
     private void UseBGMBox()
@@ -98,6 +186,12 @@ public class CubePlay : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         bIsAttack = false;
+    }
+
+    private IEnumerator CoroutineAttackFSM()
+    {
+        yield return new WaitForSeconds(0.5f);
+        eCubePlayState = CUBE_PLAY_STATE.IDLE;
     }
 
     private void HardAnimaitor(float fHorizontal, float fVertical)
