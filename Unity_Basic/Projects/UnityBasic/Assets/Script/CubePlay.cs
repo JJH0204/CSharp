@@ -7,6 +7,7 @@ public class CubePlay : MonoBehaviour
     private Animator animator; // cache
     private bool bIsAttack = false; // 공격 중인지 확인
     private Vector3 v3OriginPosition; // 초기 위치
+    
 
     // [SerializeField] private float fSpeed = 10f; // 속도
 
@@ -14,6 +15,8 @@ public class CubePlay : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         v3OriginPosition = gameObject.transform.localPosition;
+
+        
     }
 
     void Update()
