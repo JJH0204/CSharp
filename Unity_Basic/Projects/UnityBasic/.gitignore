@@ -89,3 +89,21 @@ ProjectSettings/ProjectVersion.txt
 # *.tga
 # *.tif
 # *.exr
+
+# TextMesh Pro 관련 파일
+*.tmpro
+*.tmpro.meta
+*.tmpro.asset
+*.tmpro.settings
+*.tmproproject
+*.tmproproject.meta
+*.tmproprojectsettings
+*.tmproprojectsettings.meta
+*.tmproprojectsettings.asset
+*.tmproprojectsettings.asset.meta
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro/**/*.meta
+/Assets/TextMesh Pro/**/*.asset
+/Assets/TextMesh Pro/**/*.settings
+/Assets/TextMesh Pro/**/*.txt
+/Assets/TextMesh Pro/**/*.json
