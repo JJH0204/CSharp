@@ -1,109 +1,76 @@
 # Unity 빌드 결과물 및 임시 파일
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-UserSettings/
-MemoryCaptures/
+[Ll]ibrary/  # Unity에서 생성하는 캐시 및 임시 데이터 폴더
+[Tt]emp/  # Unity 임시 파일 폴더
+[Oo]bj/  # Unity 빌드 중간 파일 폴더
+[Bb]uild/  # Unity 빌드 결과물 폴더
+[Bb]uilds/  # Unity 빌드 결과물 폴더 (다른 이름)
+[Ll]ogs/  # Unity 로그 파일 폴더
+UserSettings/  # 사용자 설정 파일 폴더
+MemoryCaptures/  # 메모리 캡처 파일 폴더
 
 # Unity의 자동 생성된 메타 데이터 파일
-# (강제 포함이 필요한 경우 제외 가능)
-*.pidb
-*.suo
-*.user
-*.userprefs
-*.csproj
-*.unityproj
-*.asset
-*.pidb
-*.sln
-*.suo
-*.svd
-*.sln*
-*.unitypackage
+*.pidb  # Unity에서 생성하는 Mono 개발 관련 파일
+*.suo  # Visual Studio 사용자 설정 파일
+*.user  # Visual Studio 사용자 설정 파일
+*.userprefs  # Unity 사용자 설정 파일
+*.csproj  # C# 프로젝트 파일
+*.unityproj  # Unity 프로젝트 파일
+*.asset  # Unity 에셋 파일
+*.sln  # Visual Studio 솔루션 파일
+*.svd  # Visual Studio 데이터베이스 파일
+*.unitypackage  # Unity 패키지 파일
 
 # Lightmap, NavMesh 및 GI 캐시
-[Ll]ightmapSnapshot
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.meta
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.bin
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.manifest
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.pdb
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resS
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resource
-/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.assets
+[Ll]ightmapSnapshot  # Unity 라이트맵 스냅샷 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.meta  # 스트리밍 에셋 메타 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.bin  # 스트리밍 에셋 바이너리 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.manifest  # 스트리밍 에셋 매니페스트 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.pdb  # 스트리밍 에셋 디버그 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resS  # 스트리밍 에셋 리소스 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.resource  # 스트리밍 에셋 리소스 파일
+/[Aa]ssets/[Ss]treaming[Aa]ssets/**/*.assets  # 스트리밍 에셋 파일
 
 # Rider, VSCode 및 기타 IDE 관련 파일
-.vscode/
-.idea/
-*.sln*
-*.csproj
-*.unityproj
-*.tmp
-*.bak
-*.swp
-*.lock
-*.log
-*.git/
-*.tmp/
+.vscode/  # VSCode 설정 폴더
+.idea/  # JetBrains Rider 설정 폴더
+*.tmp  # 임시 파일
+*.bak  # 백업 파일
+*.swp  # Vim 스왑 파일
+*.lock  # 잠금 파일
+*.log  # 로그 파일
 
 # MacOS 관련 파일
-.DS_Store
-._*
+.DS_Store  # MacOS 디렉토리 메타데이터 파일
+._*  # MacOS 리소스 포크 파일
 
 # Windows 관련 파일
-Thumbs.db
-Desktop.ini
+Thumbs.db  # Windows 썸네일 캐시 파일
+Desktop.ini  # Windows 폴더 설정 파일
 
 # 빌드된 실행 파일
-*.apk
-*.aab
-*.exe
-*.app
-*.xcodeproj
-*.xcworkspace
-*.ipa
+*.apk  # Android 실행 파일
+*.aab  # Android App Bundle 파일
+*.exe  # Windows 실행 파일
+*.app  # macOS 실행 파일
+*.xcodeproj  # Xcode 프로젝트 파일
+*.xcworkspace  # Xcode 워크스페이스 파일
+*.ipa  # iOS 실행 파일
 
 # 플러그인 및 패키지
-Packages/*/
-!Packages/manifest.json
-!Packages/packages-lock.json
+Packages/*/  # Unity 패키지 폴더
+!Packages/manifest.json  # Unity 패키지 매니페스트 파일 (필수 포함)
+!Packages/packages-lock.json  # Unity 패키지 잠금 파일 (필수 포함)
 
 # 유니티 Collaborate / Plastic SCM 관련 파일 (협업 도구 사용 시 필요)
-.collab/
-*.plastic/
-*.plasticignore
+.collab/  # Unity Collaborate 관련 파일
+*.plastic/  # Plastic SCM 관련 파일
+*.plasticignore  # Plastic SCM 무시 파일
 
 # PlayerPrefs (로컬 설정 관련 파일)
-ProjectSettings/EditorBuildSettings.asset
-ProjectSettings/TagManager.asset
-ProjectSettings/ProjectVersion.txt
-
-# Git LFS를 사용할 경우 (대용량 파일 관리)
-# *.psd
-# *.fbx
-# *.wav
-# *.mp4
-# *.mov
-# *.tga
-# *.tif
-# *.exr
+ProjectSettings/EditorBuildSettings.asset  # Unity 에디터 빌드 설정 파일
+ProjectSettings/TagManager.asset  # Unity 태그 및 레이어 설정 파일
+ProjectSettings/ProjectVersion.txt  # Unity 프로젝트 버전 파일
 
 # TextMesh Pro 관련 파일
-*.tmpro
-*.tmpro.meta
-*.tmpro.asset
-*.tmpro.settings
-*.tmproproject
-*.tmproproject.meta
-*.tmproprojectsettings
-*.tmproprojectsettings.meta
-*.tmproprojectsettings.asset
-*.tmproprojectsettings.asset.meta
-/Assets/TextMesh Pro/
-/Assets/TextMesh Pro/**/*.meta
-/Assets/TextMesh Pro/**/*.asset
-/Assets/TextMesh Pro/**/*.settings
-/Assets/TextMesh Pro/**/*.txt
-/Assets/TextMesh Pro/**/*.json
+*.tmpro  # TextMesh Pro 파일
+/Assets/TextMesh Pro/  # TextMesh Pro 에셋 폴더
