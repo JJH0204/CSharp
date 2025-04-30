@@ -86,3 +86,4 @@ Desktop.ini
 Packages/*/
 !Packages/manifest.json
 !Packages/packages-lock.json
+Unity_Basic/Projects/UnityBasic/Temp/UnityLockfile
