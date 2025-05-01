@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class InitScene_Init : MonoBehaviour
 {
-    private bool isInit = false;    // 초기화가 완료되었는지 여부를 나타내는 변수
+    // private bool isInit = false;    // 초기화가 완료되었는지 여부를 나타내는 변수
     private const int PROGRESS_VALUE = 5;
     private int progressAddValue = 0;    // 초기화 진행률을 나타내는 변수
     // private SystemManager systemManager;    // cache
@@ -60,10 +60,11 @@ public class InitScene_Init : MonoBehaviour
         List<Action> actions = new List<Action>()
         {
             SystemManagerInit,
-            EffectManagerInit,
-            ObjPoolManagerInit,
-            WindowManagerInit,
-            SoundManagerInit,
+            // EffectManagerInit,
+            // ObjPoolManagerInit,
+            // WindowManagerInit,
+            // SoundManagerInit,
+            SceneLoadManagerInit,
             LoadScene
         };
 
@@ -104,6 +105,11 @@ public class InitScene_Init : MonoBehaviour
         SystemManager.Instance.SetInit();    // SystemManager의 SetInit() 메서드 호출
     }
 
+    private void SceneLoadManagerInit()
+    {
+        SceneLoadManager.Instance.SetInit();
+    }
+
     private void EffectManagerInit()
     {
         // effectManager.SetInit();
@@ -126,6 +132,7 @@ public class InitScene_Init : MonoBehaviour
 
     private void LoadScene()
     {
-        SceneManager.LoadScene(SCENE_TYPE.Lobby.ToString());    // 로비 씬으로 이동
+        // SceneManager.LoadScene(SCENE_TYPE.Loading.ToString());    // 로비 씬으로 이동
+        SceneLoadManager.Instance.SceneLoad(SCENE_TYPE.Lobby);    // 로비 씬으로 이동
     }
 }
