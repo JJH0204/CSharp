@@ -133,6 +133,7 @@ public class InitScene_Init : MonoBehaviour
     private void LoadScene()
     {
         // SceneManager.LoadScene(SCENE_TYPE.Loading.ToString());    // 로비 씬으로 이동
-        SceneLoadManager.Instance.SceneLoad(SCENE_TYPE.Lobby);    // 로비 씬으로 이동
+        SceneLoadManager.Instance.SetInit();
+        SceneLoadManager.Instance.SceneLoad(SceneLoadManager.Instance.initSceneType);    // 로비 씬으로 이동
     }
 }

@@ -25,7 +25,7 @@ public class SceneLoadManager : ManagerBase
 
     public bool IsInit { get; set; } = false;
     public SCENE_TYPE afterSceneType { get; set; }
-
+    public SCENE_TYPE initSceneType { get; set; } = SCENE_TYPE.Lobby;
     private void Awake()
     {
         DontDestroy<SceneLoadManager>();
@@ -34,6 +34,12 @@ public class SceneLoadManager : ManagerBase
     public void SetInit()
     {
         IsInit = true;
+    }
+
+    public void GoInitAndReturnScene(SCENE_TYPE sceneType)
+    {
+        this.initSceneType = sceneType;
+        SceneManager.LoadScene(SCENE_TYPE.Init.ToString());
     }
 
     public void SceneLoad(SCENE_TYPE sceneType)
