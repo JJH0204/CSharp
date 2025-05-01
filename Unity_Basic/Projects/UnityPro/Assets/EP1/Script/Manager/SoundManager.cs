@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : ManagerBase
 {
     private AudioSource audioSource; // cache
     private int nCurrentIndex = 0; // 현재 인덱스
     // private bool bIsPlaying = false; // 재생 중인지 확인
     [SerializeField] private AudioClip[] audioClips;
+
+    private void Awake()
+    {
+        DontDestroy<SoundManager>();
+    }
 
     public void SetInit()
     {

@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjPoolManager : MonoBehaviour
+public class ObjPoolManager : ManagerBase
 {
     private Dictionary<int, List<GameObject>> dics = new Dictionary<int, List<GameObject>>();
+
+    private void Awake()
+    {
+        DontDestroy<ObjPoolManager>();
+    }
 
     public void SetInit()
     {

@@ -18,16 +18,24 @@ public class InitScene_Init : MonoBehaviour
 
     private void Awake()    // Scene이 로드되어 오브젝트들의 인스턴스화가 완료되면 호출되어 초기화에 필요한 메니저들을 캐싱한다.
     {
+        // systemManager = FindAnyObjectByType<SystemManager>();
+        // effectManager = FindAnyObjectByType<EffectManager>();
+        // objPoolManager = FindAnyObjectByType<ObjPoolManager>();
+        // windowManager = FindAnyObjectByType<WindowManager>();
+        // soundManager = FindAnyObjectByType<SoundManager>();
+        // initSceneUI = FindAnyObjectByType<InitScene_UI>();
+    }
+
+    private IEnumerator Start()    // Awake()가 끝나고 호출되어 초기화가 필요한 메니저들을 일괄 초기화 시킨다.
+    {
+        yield return null;  // 다음 프레임까지 대기하여 모든 오브젝트들이 초기화된 후에 메니저들을 캐싱한다.
         systemManager = FindAnyObjectByType<SystemManager>();
         effectManager = FindAnyObjectByType<EffectManager>();
         objPoolManager = FindAnyObjectByType<ObjPoolManager>();
         windowManager = FindAnyObjectByType<WindowManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
         initSceneUI = FindAnyObjectByType<InitScene_UI>();
-    }
 
-    private void Start()    // Awake()가 끝나고 호출되어 초기화가 필요한 메니저들을 일괄 초기화 시킨다.
-    {
         StartCoroutine(C_Manager());    // 초기화 메니저 코루틴 시작
     }
 

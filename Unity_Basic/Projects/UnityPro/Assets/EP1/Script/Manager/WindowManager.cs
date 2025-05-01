@@ -16,9 +16,14 @@ public class WindowInfo // 활성화된 윈도우 정보를 저장하는 클래�
     }
 }
 
-public class WindowManager : MonoBehaviour
+public class WindowManager : ManagerBase
 {
     private List<WindowInfo> windows = new List<WindowInfo>();
+
+    private void Awake()
+    {
+        DontDestroy<WindowManager>();
+    }
 
     public void SetInit()
     {

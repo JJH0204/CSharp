@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviour
+public class EffectManager : ManagerBase
 {
     [SerializeField] private GameObject[] gEffectPrefabs; // 이펙트 프리팹
     [SerializeField] private float[] fDestoryTime; // 이펙트 소멸 시간
+
+    private void Awake()
+    {
+        DontDestroy<EffectManager>();
+    }
+
     public void SetInit()
     {
     }
