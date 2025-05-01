@@ -1,4 +1,8 @@
 # 소스 링크
-- [Scene type 정의](../Script/Config/Define.cs): 열거형으로 원하는 Scene 을 Scene Manager를 이용해 로그할 때 사용
-- [Init Scene 기능 정의](../Script/InitScene/InitScene_Init.cs): 초기화 Scene에서 진행해야 할 각종 Manager 오브젝트의 설정값 로드 및 로드 정도 안내
-- [Init Scene UI 기능 구현](../Script/InitScene/InitScene_UI.cs): 초기화 Scene에서 사용하는 슬라이드 UI 컨트롤 목적으로 사용
+- [Lobby Scene 기능 정의](../Script/LobbyScene/LobbyScene_Init.cs): 
+- [Lobby Scene UI 기능 구현](../Script/LobbyScene/LobbyScene_UI.cs): 
+- [Manager 기본 객체](../Script/Manager/ManagerBase.cs)
+
+메니저 오브젝트 들의 중복 생성을 방지하는 방법 정리
+
+Destroy 메소드의 특징 파악: 호출 후 다음 프레임으로 전환되어야 적용됨됨
