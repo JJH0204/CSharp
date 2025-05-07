@@ -1,0 +1,46 @@
+# Visual Studio 관련
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# 빌드 출력
+bin/
+obj/
+out/
+
+# 패키지
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# 로그 및 잠금 파일
+*.log
+*.lock
+*.cache
+*.pdb
+*.mdb
+
+# 배포 관련
+*.publish/
+*.deploy/
+
+# 환경 설정
+appsettings.*.json
+secrets.json
+
+# OS 관련
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 기타
+*.tmp
+*.bak
+*.swp
+*.resx
+*.config
