@@ -24,7 +24,7 @@ public class LoadingScene_Init : MonoBehaviour
 
         while (!asyncOperation.isDone)
         {
-            Debug.Log(asyncOperation.progress);
+            // Debug.Log(asyncOperation.progress);
             loadingSceneUI.SetPercent(asyncOperation.progress / 0.9f); // 0.0f ~ 1.0f
             yield return null; // 다음 프레임까지 대기
         }

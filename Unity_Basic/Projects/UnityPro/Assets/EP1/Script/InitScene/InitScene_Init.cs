@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class InitScene_Init : MonoBehaviour
 {
     // private bool isInit = false;    // 초기화가 완료되었는지 여부를 나타내는 변수
-    private const int PROGRESS_VALUE = 5;
+    private const int PROGRESS_VALUE = 4;
     private int progressAddValue = 0;    // 초기화 진행률을 나타내는 변수
     // private SystemManager systemManager;    // cache
     // private EffectManager effectManager;    // cache
@@ -65,6 +66,7 @@ public class InitScene_Init : MonoBehaviour
             // WindowManagerInit,
             // SoundManagerInit,
             SceneLoadManagerInit,
+            NetworkManagerInit,
             LoadScene
         };
 
@@ -109,6 +111,14 @@ public class InitScene_Init : MonoBehaviour
     {
         SceneLoadManager.Instance.SetInit();
     }
+
+
+    private void NetworkManagerInit()
+    {
+        NetworkManager.Instance.SetInit(apiUrl: Config.SERVER_API_URL);    // 서버 API URL을 설정하여 초기화
+        NetworkManager.Instance.SendPacket();    // 서버에 연결 요청
+    }
+
 
     private void EffectManagerInit()
     {
