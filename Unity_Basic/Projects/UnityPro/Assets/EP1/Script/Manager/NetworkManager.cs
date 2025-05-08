@@ -78,15 +78,15 @@ public class NetworkManager : ManagerBase
             }
             else
             {
-                Debug.Log("Connected to server: " + apiUrl);
+                // Debug.Log("Connected to server: " + apiUrl);
 
                 string jsonData = request.downloadHandler.text;
                 Debug.Log("Received data: " + jsonData);
 
                 ApplicationConfigReceivePacket applicationConfigReceivePacket = JsonUtility.FromJson<ApplicationConfigReceivePacket>(jsonData);
 
-                Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
-                Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
+                // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
+                // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
             }
         }
     }
