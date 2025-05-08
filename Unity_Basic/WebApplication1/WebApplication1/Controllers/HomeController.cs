@@ -30,9 +30,11 @@ namespace WebApplication1.Controllers
                 json = await reader.ReadToEndAsync();
             }
 
+            ApplicationConfigReceivePacket? applicationConfigReceivePacket = JsonConvert.DeserializeObject<ApplicationConfigReceivePacket>(json);
 
-            UserInfo userInfo = new UserInfo(1, "John Doe");
-            string packet = JsonConvert.SerializeObject(userInfo);  // Json 직렬화
+            ApplicationConfigSendPacket applicationConfigSendPacket = new ApplicationConfigSendPacket(applicationConfigReceivePacket.PacketName, 200, "https://localhost:7025/");
+            //UserInfo userInfo = new UserInfo(1, "John Doe");
+            string packet = JsonConvert.SerializeObject(applicationConfigSendPacket);  // Json 직렬화
             return Content(packet);
         }
     }

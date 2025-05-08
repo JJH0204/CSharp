@@ -116,7 +116,14 @@ public class InitScene_Init : MonoBehaviour
     private void NetworkManagerInit()
     {
         NetworkManager.Instance.SetInit(apiUrl: Config.SERVER_API_URL);    // 서버 API URL을 설정하여 초기화
-        NetworkManager.Instance.SendPacket();    // 서버에 연결 요청
+
+        ApplicationConfigSendPacket sendPacket = new ApplicationConfigSendPacket(
+            PACKET_NAME_TYPE.ApplicationConfig,
+            Config.E_ENVIRONMENT_TYPE,
+            Config.E_OS_TYPE,
+            Config.APP_VERSION);
+
+        NetworkManager.Instance.SendPacket(sendPacket);    // 서버에 연결 요청
     }
 
 

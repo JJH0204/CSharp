@@ -12,55 +12,6 @@ public class CertHandler : CertificateHandler
     }
 }
 
-public class SendPacketBase
-{
-    public readonly string PacketName;
-
-    public SendPacketBase(PACKET_NAME_TYPE packetName)
-    {
-        PacketName = packetName.ToString();
-    }
-}
-
-public class ReceivePacketBase
-{
-    public readonly int ReturnCode;
-
-    public ReceivePacketBase(int returnCode)
-    {
-        ReturnCode = returnCode;
-    }
-}
-
-public class ApplicationConfigSendPacket: SendPacketBase
-{
-    // 서버에서 환경에 따라 내려준 주소를 사용하려고 한다.
-    // enviranment 개발 환경
-    // os type - Android, IOS, PC
-    // version - 1.0.0
-
-    public int Environment_Type;
-    public int OS_Type;
-    public string AppVersion;
-
-    public ApplicationConfigSendPacket(PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion) : base(packetName)
-    {
-        this.Environment_Type = (int)E_Environment_Type;
-        this.OS_Type = (int)E_OS_Type;
-        this.AppVersion = appVersion;
-    }
-}
-
-public class ApplicationConfigReceivePacket: ReceivePacketBase
-{
-    public readonly string ApiUrl;
-
-    public ApplicationConfigReceivePacket(int returnCode, string apiUrl) : base(returnCode)
-    {
-        this.ApiUrl = apiUrl;
-    }
-}
-
 public class NetworkManager : ManagerBase
 {
     private static NetworkManager instance = null;
@@ -96,19 +47,13 @@ public class NetworkManager : ManagerBase
         this.apiUrl = apiUrl;
     }
 
-    public void SendPacket()
+    public void SendPacket(SendPacketBase sendPacket)
     {
-        StartCoroutine(C_ConnectToServer());
+        StartCoroutine(C_ConnectToServer(sendPacket));
     }
 
-    private IEnumerator C_ConnectToServer()
+    private IEnumerator C_ConnectToServer(SendPacketBase sendPacket)
     {
-        ApplicationConfigSendPacket sendPacket = new ApplicationConfigSendPacket(
-            PACKET_NAME_TYPE.ApplicationConfig,
-            Config.E_ENVIRONMENT_TYPE,
-            Config.E_OS_TYPE,
-            Config.APP_VERSION);
-
         string packet = JsonUtility.ToJson(sendPacket);
         Debug.Log("[Send packet]: " + packet);
 
@@ -137,6 +82,11 @@ public class NetworkManager : ManagerBase
 
                 string jsonData = request.downloadHandler.text;
                 Debug.Log("Received data: " + jsonData);
+
+                ApplicationConfigReceivePacket applicationConfigReceivePacket = JsonUtility.FromJson<ApplicationConfigReceivePacket>(jsonData);
+
+                Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
+                Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
             }
         }
     }
