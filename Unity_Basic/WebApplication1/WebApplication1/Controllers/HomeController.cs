@@ -20,8 +20,17 @@ namespace WebApplication1.Controllers
 
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        [HttpPost]
+        public async Task<IActionResult> Index()
         {
+            string json = string.Empty;
+            // 클라이언트에서 Post로 전송한 데이터 읽음
+            using (var reader = new StreamReader(Request.Body))
+            {
+                json = await reader.ReadToEndAsync();
+            }
+
+
             UserInfo userInfo = new UserInfo(1, "John Doe");
             string packet = JsonConvert.SerializeObject(userInfo);  // Json 직렬화
             return Content(packet);

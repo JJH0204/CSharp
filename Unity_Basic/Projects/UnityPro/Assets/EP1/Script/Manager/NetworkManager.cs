@@ -39,9 +39,9 @@ public class ApplicationConfigSendPacket: SendPacketBase
     // os type - Android, IOS, PC
     // version - 1.0.0
 
-    public readonly int Environment_Type;
-    public readonly int OS_Type;
-    public readonly string AppVersion;
+    public int Environment_Type;
+    public int OS_Type;
+    public string AppVersion;
 
     public ApplicationConfigSendPacket(PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion) : base(packetName)
     {
