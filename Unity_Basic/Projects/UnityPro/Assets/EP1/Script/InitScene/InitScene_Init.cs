@@ -58,6 +58,19 @@ public class InitScene_Init : MonoBehaviour
 
     private IEnumerator C_Manager()
     {
+        IEnumerator enumerator = NetworkManagerInit();    // 네트워크 초기화
+        yield return StartCoroutine(enumerator);
+        bool isNetworkInitSuccess = (bool)enumerator.Current;    // 네트워크 초기화 성공 여부
+        if (isNetworkInitSuccess)
+        {
+            Debug.Log("NetworkManager Init Success");
+        }
+        else
+        {
+            Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
+            yield break;    // 초기화 실패 시 코루틴 종료
+        }
+
         List<Action> actions = new List<Action>()
         {
             SystemManagerInit,
@@ -66,7 +79,6 @@ public class InitScene_Init : MonoBehaviour
             // WindowManagerInit,
             // SoundManagerInit,
             SceneLoadManagerInit,
-            NetworkManagerInit,
             LoadScene
         };
 
@@ -113,17 +125,31 @@ public class InitScene_Init : MonoBehaviour
     }
 
 
-    private void NetworkManagerInit()
+    private IEnumerator NetworkManagerInit()
     {
-        NetworkManager.Instance.SetInit(apiUrl: Config.SERVER_API_URL);    // 서버 API URL을 설정하여 초기화
+        NetworkManager.Instance.SetInit(apiUrl: Config.SERVER_APP_CONFIG_URL);    // 서버 API URL을 설정하여 초기화
 
         ApplicationConfigSendPacket sendPacket = new ApplicationConfigSendPacket(
+            Config.SERVER_APP_CONFIG_URL,
             PACKET_NAME_TYPE.ApplicationConfig,
             Config.E_ENVIRONMENT_TYPE,
             Config.E_OS_TYPE,
             Config.APP_VERSION);
 
-        NetworkManager.Instance.SendPacket(sendPacket);    // 서버에 연결 요청
+        IEnumerator coroutine = NetworkManager.Instance.C_SendPacket<ApplicationConfigReceivePacket>(sendPacket);
+        StartCoroutine(coroutine);    // 서버에 연결 요청
+        ApplicationConfigReceivePacket receivePacket = coroutine.Current as ApplicationConfigReceivePacket;
+
+        if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)    // 서버에서 응답이 성공적으로 왔다면
+        {
+            SystemManager.Instance.ApiUrl = receivePacket.ApiUrl;    // 서버에서 내려준 주소를 사용
+            yield return true;
+        }
+        else    // 서버에서 응답이 실패했다면
+        {
+            yield return false;
+        }
+        // NetworkManager.Instance.SendPacket(sendPacket);    // 서버에 연결 요청
     }
 
 

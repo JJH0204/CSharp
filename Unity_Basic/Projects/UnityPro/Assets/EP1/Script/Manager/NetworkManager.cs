@@ -47,12 +47,12 @@ public class NetworkManager : ManagerBase
         this.apiUrl = apiUrl;
     }
 
-    public void SendPacket(SendPacketBase sendPacket)
-    {
-        StartCoroutine(C_ConnectToServer(sendPacket));
-    }
+    // public void SendPacket(SendPacketBase sendPacket)
+    // {
+    //     StartCoroutine(C_SendPacket(sendPacket));
+    // }
 
-    private IEnumerator C_ConnectToServer(SendPacketBase sendPacket)
+    public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
     {
         string packet = JsonUtility.ToJson(sendPacket);
         Debug.Log("[Send packet]: " + packet);
@@ -75,15 +75,17 @@ public class NetworkManager : ManagerBase
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Error: " + request.error);
+                yield return null;
             }
             else
             {
                 // Debug.Log("Connected to server: " + apiUrl);
-
+                // 성공적으로 응답을 받았을 때
                 string jsonData = request.downloadHandler.text;
                 Debug.Log("Received data: " + jsonData);
 
-                ApplicationConfigReceivePacket applicationConfigReceivePacket = JsonUtility.FromJson<ApplicationConfigReceivePacket>(jsonData);
+                T receivePacket = JsonUtility.FromJson<T>(jsonData);
+                yield return receivePacket;
 
                 // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
                 // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);

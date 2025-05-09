@@ -9,7 +9,7 @@ public class ApplicationConfigSendPacket : SendPacketBase
     public int OS_Type;
     public string AppVersion;
 
-    public ApplicationConfigSendPacket(PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion) : base(packetName)
+    public ApplicationConfigSendPacket(string URL, PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion) : base(URL, packetName)
     {
         this.Environment_Type = (int)E_Environment_Type;
         this.OS_Type = (int)E_OS_Type;

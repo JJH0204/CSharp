@@ -9,16 +9,16 @@ public class Config
 
 #if DEV
     public const ENVIRONMENT_TYPE E_ENVIRONMENT_TYPE = ENVIRONMENT_TYPE.DEV; // DEV, STAGE, LIVE
-    public const string SERVER_API_URL = "https://localhost:7025/";
+    public const string SERVER_APP_CONFIG_URL = "https://localhost:7025/";
 #elif STAGE
     public const ENVIRONMENT_TYPE E_ENVIRONMENT_TYPE = ENVIRONMENT_TYPE.STAGE; // DEV, STAGE, LIVE
-    public const string SERVER_API_URL = "https://localhost:7025/";
+    public const string SERVER_APP_CONFIG_URL = "https://localhost:7025/";
 #elif LIVE
     public const ENVIRONMENT_TYPE E_ENVIRONMENT_TYPE = ENVIRONMENT_TYPE.LIVE; // DEV, STAGE, LIVE
-    public const string SERVER_API_URL = "https://localhost:7025/";
+    public const string SERVER_APP_CONFIG_URL = "https://localhost:7025/";
 #else
     public const ENVIRONMENT_TYPE E_ENVIRONMENT_TYPE = ENVIRONMENT_TYPE.DEV; // DEV, STAGE, LIVE
-    public const string SERVER_API_URL = "https://localhost:7025/";
+    public const string SERVER_APP_CONFIG_URL = "https://localhost:7025/";
 #endif
 
 #if UNITY_ANDROID

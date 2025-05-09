@@ -1,9 +1,11 @@
 public class SendPacketBase
 {
+    public string URL;
     public string PacketName;
 
-    public SendPacketBase(PACKET_NAME_TYPE packetName)
+    public SendPacketBase(string URL, PACKET_NAME_TYPE packetName)
     {
+        this.URL = URL;
         PacketName = packetName.ToString();
     }
 }
