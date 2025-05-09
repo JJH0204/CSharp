@@ -15,10 +15,10 @@
         public string PacketName = string.Empty;
         public int ReturnCode;
 
-        public SendPacketBase(string packetName,int returnCode)
+        public SendPacketBase(PACKET_NAME_TYPE packetName,RETURN_CODE returnCode)
         {
-            PacketName = packetName;
-            ReturnCode = returnCode;
+            PacketName = packetName.ToString();
+            ReturnCode = (int)returnCode;
         }
     }
 }
