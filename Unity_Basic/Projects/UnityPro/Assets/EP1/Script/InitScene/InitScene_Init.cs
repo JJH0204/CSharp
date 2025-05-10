@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class InitScene_Init : MonoBehaviour
 {
+    [SerializeField] private GameObject systemPopupMessagePrefab;    // 시스템 메시지 팝업 프리팹
+    [SerializeField] private Transform parentPopupMessage;    // 시스템 메시지 팝업 부모 오브젝트
     private const int PROGRESS_VALUE = 4;
     private int progressAddValue = 0;    // 초기화 진행률을 나타내는 변수
     private InitScene_UI initSceneUI;       // cache
@@ -39,6 +41,14 @@ public class InitScene_Init : MonoBehaviour
         else
         {
             Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
+            GameObject objPopupMessage = Instantiate(systemPopupMessagePrefab, parentPopupMessage);
+
+            PopupMessageInfo popupMessageInfo = new PopupMessageInfo(PopupMessageType.ONE_BUTTON, "서버 오류", "서버에 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.");
+            PopupMessage popupMessage = objPopupMessage.GetComponent<PopupMessage>();
+            popupMessage.OpenMessage(popupMessageInfo, null, () =>
+            {
+                Application.Quit();    // 앱 종료
+            });
             yield break;    // 초기화 실패 시 코루틴 종료
         }
 
