@@ -5,6 +5,7 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class InitScene_Init : MonoBehaviour
 {
@@ -34,11 +35,7 @@ public class InitScene_Init : MonoBehaviour
         IEnumerator enumerator = NetworkManagerInit();    // 네트워크 초기화
         yield return StartCoroutine(enumerator);
         bool isNetworkInitSuccess = (bool)enumerator.Current;    // 네트워크 초기화 성공 여부
-        if (isNetworkInitSuccess)
-        {
-            Debug.Log("NetworkManager Init Success");
-        }
-        else
+        if (!isNetworkInitSuccess)
         {
             Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
             GameObject objPopupMessage = Instantiate(systemPopupMessagePrefab, parentPopupMessage);
@@ -51,6 +48,7 @@ public class InitScene_Init : MonoBehaviour
             });
             yield break;    // 초기화 실패 시 코루틴 종료
         }
+        Debug.Log("NetworkManager Init Success");
 
         yield return StartCoroutine(EtcManager());
 #endif
@@ -117,7 +115,13 @@ public class InitScene_Init : MonoBehaviour
             Config.APP_VERSION);
         IEnumerator coroutine = NetworkManager.Instance.C_SendPacket<ApplicationConfigReceivePacket>(sendPacket);
         StartCoroutine(coroutine);    // 서버에 연결 요청
-        ApplicationConfigReceivePacket receivePacket = coroutine.Current as ApplicationConfigReceivePacket;
+        
+        ApplicationConfigReceivePacket receivePacket = coroutine.Current is ApplicationConfigReceivePacket packet ? packet : null;
+
+        Debug.Log(coroutine.Current);
+        Debug.Log(receivePacket);
+
+        /// TODO: 서버에서 응답이 정상적으로 왔는지 확인 (현재 coroutine.Current는 null)
 
         if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)    // 서버에서 응답이 성공적으로 왔다면
         {

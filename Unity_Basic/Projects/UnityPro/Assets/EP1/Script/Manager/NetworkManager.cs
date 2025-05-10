@@ -26,7 +26,7 @@ public class NetworkManager : ManagerBase
                 instance = FindObjectOfType<NetworkManager>();
                 if (instance == null)
                 {
-                    GameObject obj = new GameObject("SystemManager");
+                    GameObject obj = new GameObject("NetworkManager");
                     instance = obj.AddComponent<NetworkManager>();
                 }
             }
@@ -52,48 +52,7 @@ public class NetworkManager : ManagerBase
     //     StartCoroutine(C_SendPacket(sendPacket));
     // }
 
-    public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
-    {
-        string packet = JsonUtility.ToJson(sendPacket);
-        Debug.Log("[Send packet]: " + packet);
-
-        // using 으로 UnityWebRequest 객체를 생성, 사용 후 자동으로 해제
-        using (UnityWebRequest request = UnityWebRequest.PostWwwForm(apiUrl, packet))
-        {
-            // http 통신을 위한 POST 요청 생성성
-            byte[] bytes = new System.Text.UTF8Encoding().GetBytes(packet);
-            request.uploadHandler = new UploadHandlerRaw(bytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
-            request.certificateHandler = new CertHandler();
-
-            // Debug.Log("Connected to server: " + apiUrl);
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Error: " + request.error);
-                yield return null;
-            }
-            else
-            {
-                // Debug.Log("Connected to server: " + apiUrl);
-                // 성공적으로 응답을 받았을 때
-                string jsonData = request.downloadHandler.text;
-                Debug.Log("Received data: " + jsonData);
-
-                T receivePacket = JsonUtility.FromJson<T>(jsonData);
-                yield return receivePacket;
-
-                // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
-                // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
-            }
-        }
-    }
-
-
+#if By_Call_Back
     // call-back
     public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket, Action<ReceivePacketBase> action = null) where T : ReceivePacketBase
     {
@@ -137,4 +96,47 @@ public class NetworkManager : ManagerBase
             }
         }
     }
+#else
+    public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
+    {
+        string packet = JsonUtility.ToJson(sendPacket);
+        Debug.Log("[Send packet]: " + packet);
+
+        // using 으로 UnityWebRequest 객체를 생성, 사용 후 자동으로 해제
+        using (UnityWebRequest request = UnityWebRequest.PostWwwForm(apiUrl, packet))
+        {
+            // http 통신을 위한 POST 요청 생성성
+            byte[] bytes = new System.Text.UTF8Encoding().GetBytes(packet);
+            request.uploadHandler = new UploadHandlerRaw(bytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
+            request.certificateHandler = new CertHandler();
+
+            // Debug.Log("Connected to server: " + apiUrl);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + request.error);
+                yield return null;
+            }
+            else
+            {
+                // Debug.Log("Connected to server: " + apiUrl);
+                // 성공적으로 응답을 받았을 때
+                string jsonData = request.downloadHandler.text;
+                Debug.Log("Received data: " + jsonData);
+
+                T receivePacket = JsonUtility.FromJson<T>(jsonData);
+                yield return receivePacket;
+                // return receivePacket;
+
+                // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
+                // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
+            }
+        }
+    }
+#endif
 }

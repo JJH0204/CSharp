@@ -21,7 +21,7 @@ namespace WebApplication1.Config
     public const string SERVER_API_URL = "https://localhost:7025/";
 #else
         public const ENVIRONMENT_TYPE E_ENVIRONMENT_TYPE = ENVIRONMENT_TYPE.DEV; // DEV, STAGE, LIVE
-        public const string SERVER_API_URL = "https://localhost:7025/";
+        public const string SERVER_API_URL = "http://localhost:5254/";
 #endif
 
 #if UNITY_ANDROID
