@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApplication1.Models;
 
-// °£´ÜÇÑ C# °ÔÀÓ ¼­¹ö ÄÚµå
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ C# ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 namespace WebApplication1.Controllers
 {
     public class UserInfo
@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Index()
         {
             SendPacketBase sendPacket = null;
-            // Å¬¶óÀÌ¾ğÆ®¿¡¼­ Post·Î Àü¼ÛÇÑ µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì
+            // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ Postï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (Request.ContentLength == 0)
             {
                 sendPacket = new SendPacketBase(PACKET_NAME_TYPE.None, RETURN_CODE.ERROR);
@@ -35,12 +35,12 @@ namespace WebApplication1.Controllers
             }
 
             string json = string.Empty;
-            // Å¬¶óÀÌ¾ğÆ®¿¡¼­ Post·Î Àü¼ÛÇÑ µ¥ÀÌÅÍ ÀĞÀ½
+            // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ Postï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             using (var reader = new StreamReader(Request.Body))
             {
                 json = await reader.ReadToEndAsync();
             }
-            // ¸ÕÀú ÆĞÅ¶ ÀÌ¸§À» ÀĞ¾î¿Í¼­ °Ë»ç
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ğ¾ï¿½Í¼ï¿½ ï¿½Ë»ï¿½
             ReceivePacketBase? receivePacketBase = JsonConvert.DeserializeObject<ReceivePacketBase>(json);
 
             
@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                // ÆĞÅ¶ ÀÌ¸§ÀÌ Àß¸øµÈ °æ¿ì
+                // ï¿½ï¿½Å¶ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
                 sendPacket = new SendPacketBase(PACKET_NAME_TYPE.None, RETURN_CODE.ERROR);
                 string sendData = JsonConvert.SerializeObject(sendPacket);
                 return Content(sendData);
@@ -72,14 +72,14 @@ namespace WebApplication1.Controllers
 
         private SendPacketBase ApplicationConfig(string json)
         {
-            ApplicationConfigReceivePacket? applicationConfigReceivePacket = JsonConvert.DeserializeObject<ApplicationConfigReceivePacket>(json);
-            if (applicationConfigReceivePacket == null)
+            ApplicationConfigReceivePacket? receivePacket = JsonConvert.DeserializeObject<ApplicationConfigReceivePacket>(json);
+            if (receivePacket == null)
             {
                 return new SendPacketBase(PACKET_NAME_TYPE.None, RETURN_CODE.ERROR);
             }
 
             string apiURL = string.Empty;
-            switch ((ENVIRONMENT_TYPE)applicationConfigReceivePacket.Environment_Type)
+            switch ((ENVIRONMENT_TYPE)receivePacket.Environment_Type)
             {
                 case ENVIRONMENT_TYPE.DEV:
                     apiURL = "https://localhost:7025/";
@@ -94,14 +94,24 @@ namespace WebApplication1.Controllers
                     apiURL = "https://localhost:7025/";
                     break;
             }
+
+            // ê¶Œí•œ ì„¤ì •
+            DEVELOPER_ID_AUTHORITY developerIdAuthority = DEVELOPER_ID_AUTHORITY.NONE;
+
+            // TODO: receivePacket.DevelopmentID = null ì¸ ë¬¸ì œ í•´ê²°
+            if (receivePacket.DevelopmentID == "1q2w3e4r")
+            {
+                developerIdAuthority = DEVELOPER_ID_AUTHORITY.TESTER;
+            }
+
             PACKET_NAME_TYPE packetNameType = PACKET_NAME_TYPE.None;
-            if (Enum.TryParse(applicationConfigReceivePacket.PacketName, out PACKET_NAME_TYPE type))
+            if (Enum.TryParse(receivePacket.PacketName, out PACKET_NAME_TYPE type))
                 packetNameType = type;
 
-            ApplicationConfigSendPacket applicationConfigSendPacket = new ApplicationConfigSendPacket(packetNameType, RETURN_CODE.OK, apiURL);
+            ApplicationConfigSendPacket sendPacket = new ApplicationConfigSendPacket(packetNameType, RETURN_CODE.OK, apiURL, developerIdAuthority);
             //UserInfo userInfo = new UserInfo(1, "John Doe");
-            //string packet = JsonConvert.SerializeObject(applicationConfigSendPacket);  // Json Á÷·ÄÈ­
-            return applicationConfigSendPacket;
+            //string packet = JsonConvert.SerializeObject(applicationConfigSendPacket);  // Json ï¿½ï¿½ï¿½ï¿½È­
+            return sendPacket;
         }
     }
 }

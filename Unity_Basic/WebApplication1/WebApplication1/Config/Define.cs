@@ -25,3 +25,10 @@ public enum RETURN_CODE
     NOT_FOUND = 404,
     SERVER_ERROR = 500,
 }
+
+public enum DEVELOPER_ID_AUTHORITY
+{
+    NONE = 0,
+    TESTER = 1,
+    SUPERUSER = 2,
+}

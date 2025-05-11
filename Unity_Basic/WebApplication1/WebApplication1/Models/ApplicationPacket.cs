@@ -12,22 +12,26 @@ namespace WebApplication1.Models
         public int Environment_Type;
         public int OS_Type;
         public string AppVersion;
+        public string DevelopmentID;
 
-        public ApplicationConfigReceivePacket(string packetName, int E_Environment_Type, int E_OS_Type, string appVersion) : base(packetName)
+        public ApplicationConfigReceivePacket(string packetName, int E_Environment_Type, int E_OS_Type, string appVersion, string DevelopmentID) : base(packetName)
         {
             this.Environment_Type = (int)E_Environment_Type;
             this.OS_Type = (int)E_OS_Type;
             this.AppVersion = appVersion;
+            this.DevelopmentID = DevelopmentID;
         }
     }
 
     public class ApplicationConfigSendPacket : SendPacketBase
     {
         public string ApiUrl;
+        public int DevelopmentIDAuthority;
 
-        public ApplicationConfigSendPacket(PACKET_NAME_TYPE packetName, RETURN_CODE returnCode, string apiUrl) : base(packetName, returnCode)
+        public ApplicationConfigSendPacket(PACKET_NAME_TYPE packetName, RETURN_CODE returnCode, string apiUrl, DEVELOPER_ID_AUTHORITY dEVELOPER_ID_AUTHORITY) : base(packetName, returnCode)
         {
             this.ApiUrl = apiUrl;
+            this.DevelopmentIDAuthority = (int)dEVELOPER_ID_AUTHORITY;
         }
     }
 }
