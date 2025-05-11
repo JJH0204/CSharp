@@ -8,21 +8,25 @@ public class ApplicationConfigSendPacket : SendPacketBase
     public int Environment_Type;
     public int OS_Type;
     public string AppVersion;
+    public string DeveloperId;    // 개발자 ID
 
-    public ApplicationConfigSendPacket(string URL, PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion) : base(URL, packetName)
+    public ApplicationConfigSendPacket(string URL, PACKET_NAME_TYPE packetName, ENVIRONMENT_TYPE E_Environment_Type, OS_TYPE E_OS_Type, string appVersion, string DeveloperId) : base(URL, packetName)
     {
         this.Environment_Type = (int)E_Environment_Type;
         this.OS_Type = (int)E_OS_Type;
         this.AppVersion = appVersion;
+        this.DeveloperId = DeveloperId;
     }
 }
 
 public class ApplicationConfigReceivePacket : ReceivePacketBase
 {
     public string ApiUrl;
+    public int DeveloperIdAuthority;    // 개발자 ID 권한
 
-    public ApplicationConfigReceivePacket(int returnCode, string apiUrl) : base(returnCode)
+    public ApplicationConfigReceivePacket(int returnCode, string apiUrl, int DeveloperIdAuthority) : base(returnCode)
     {
         this.ApiUrl = apiUrl;
+        this.DeveloperIdAuthority = DeveloperIdAuthority;
     }
 }

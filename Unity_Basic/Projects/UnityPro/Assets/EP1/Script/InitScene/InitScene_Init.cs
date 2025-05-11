@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 public class InitScene_Init : MonoBehaviour
 {
     [SerializeField] private GameObject systemPopupMessagePrefab;    // 시스템 메시지 팝업 프리팹
+    [SerializeField] private GameObject systemPopupInputMessagePrefab;
     [SerializeField] private Transform parentPopupMessage;    // 시스템 메시지 팝업 부모 오브젝트
     private const int PROGRESS_VALUE = 4;
     private int progressAddValue = 0;    // 초기화 진행률을 나타내는 변수
@@ -20,24 +21,30 @@ public class InitScene_Init : MonoBehaviour
         initSceneUI = FindAnyObjectByType<InitScene_UI>();
     }
 
-    private void Start()    // Awake()가 끝나고 호출되어 초기화가 필요한 메니저들을 일괄 초기화 시킨다.
+    private IEnumerator Start()    // Awake()가 끝나고 호출되어 초기화가 필요한 메니저들을 일괄 초기화 시킨다.
     {
-        StartCoroutine(C_Manager());    // 초기화 메니저 코루틴 시작
+        // yield return StartCoroutine(C_Manager());    // 초기화 메니저 코루틴 시작
+        yield return null;
+        DeveloperIdPopup();    // 개발자 인증 팝업 띄우기
     }
 
+
+#if By_Call_Back
     private IEnumerator C_Manager()
     {
-# if By_Call_Back
         NetworkManagerInit();
         yield return new WaitForSeconds(0.1f);
         SetProgress();
+    }
 #else
+    private IEnumerator C_Manager()
+    {
         IEnumerator enumerator = NetworkManagerInit();    // 네트워크 초기화
         yield return StartCoroutine(enumerator);
         bool isNetworkInitSuccess = (bool)enumerator.Current;    // 네트워크 초기화 성공 여부
         if (!isNetworkInitSuccess)
         {
-            Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
+            // Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
             GameObject objPopupMessage = Instantiate(systemPopupMessagePrefab, parentPopupMessage);
 
             PopupMessageInfo popupMessageInfo = new PopupMessageInfo(PopupMessageType.ONE_BUTTON, "서버 오류", "서버에 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.");
@@ -48,10 +55,37 @@ public class InitScene_Init : MonoBehaviour
             });
             yield break;    // 초기화 실패 시 코루틴 종료
         }
-        Debug.Log("NetworkManager Init Success");
+        // Debug.Log("NetworkManager Init Success");
+        yield return new WaitForSeconds(0.1f);
+        SetProgress();
+
+        if (SystemManager.Instance.dEVELOPER_ID_AUTHORITY == DEVELOPER_ID_AUTHORITY.NONE)    // 개발자 인증 실패
+        {
+            // TODO: 점검 팝업 띄우기
+        }
 
         yield return StartCoroutine(EtcManager());
+    }
 #endif
+
+
+    private void DeveloperIdPopup()
+    {
+        GameObject objPopupInputMessage = Instantiate(systemPopupInputMessagePrefab, parentPopupMessage);
+
+        PopupMessageInfo popupInputMessageInfo = new PopupMessageInfo(PopupMessageType.TWO_BUTTON, "개잘자 인증", "테스트를 위한 ID를 입력해주세요.");
+        PopupInputMessage popupMessage = objPopupInputMessage.GetComponent<PopupInputMessage>();
+        popupMessage.OpenMessage(popupInputMessageInfo, SystemManager.Instance.DevelopmentID, () =>
+        {
+            // 취소 버튼 클릭 시
+            StartCoroutine(C_Manager());
+        },
+        (string inputFieldValue) =>
+        {
+            // 확인 버튼 클릭 시
+            SystemManager.Instance.DevelopmentID = inputFieldValue;    // 개발자 ID 저장
+            StartCoroutine(C_Manager());
+        });
     }
 
     private void SetProgress()
@@ -94,12 +128,12 @@ public class InitScene_Init : MonoBehaviour
         if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)    // 서버에서 응답이 성공적으로 왔다면
         {
             SystemManager.Instance.ApiUrl = receivePacket.ApiUrl;    // 서버에서 내려준 주소를 사용
-            Debug.Log("NetworkManager Init Success");
+            // Debug.Log("NetworkManager Init Success");
             StartCoroutine(EtcManager());
         }
         else
         {
-            Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
+            // Debug.Log("NetworkManager Init Failed"); // 서버 오류, 안내창 띄워주기기
         }
     }
 #else
@@ -112,18 +146,19 @@ public class InitScene_Init : MonoBehaviour
             PACKET_NAME_TYPE.ApplicationConfig,
             Config.E_ENVIRONMENT_TYPE,
             Config.E_OS_TYPE,
-            Config.APP_VERSION);
+            Config.APP_VERSION,
+            SystemManager.Instance.DevelopmentID    // 개발자 ID
+            );
+
         IEnumerator enumerator = NetworkManager.Instance.C_SendPacket<ApplicationConfigReceivePacket>(sendPacket);
         yield return StartCoroutine(enumerator);    // 서버에 연결 요청 (서버에서 응답이 정상적으로 왔는지 확인 (현재 coroutine.Current는 null) 문제 해결 꼭 yield return 쓰기)
 
         ApplicationConfigReceivePacket receivePacket = enumerator.Current is ApplicationConfigReceivePacket packet ? packet : null;
 
-        // Debug.Log(enumerator.Current);
-        // Debug.Log(receivePacket);
-
         if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)    // 서버에서 응답이 성공적으로 왔다면
         {
             SystemManager.Instance.ApiUrl = receivePacket.ApiUrl;    // 서버에서 내려준 주소를 사용
+            SystemManager.Instance.dEVELOPER_ID_AUTHORITY = (DEVELOPER_ID_AUTHORITY)receivePacket.DeveloperIdAuthority;
             yield return true;
         }
         else    // 서버에서 응답이 실패했다면
