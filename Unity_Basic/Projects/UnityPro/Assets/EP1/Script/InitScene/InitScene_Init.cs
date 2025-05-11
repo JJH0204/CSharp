@@ -113,15 +113,13 @@ public class InitScene_Init : MonoBehaviour
             Config.E_ENVIRONMENT_TYPE,
             Config.E_OS_TYPE,
             Config.APP_VERSION);
-        IEnumerator coroutine = NetworkManager.Instance.C_SendPacket<ApplicationConfigReceivePacket>(sendPacket);
-        StartCoroutine(coroutine);    // 서버에 연결 요청
-        
-        ApplicationConfigReceivePacket receivePacket = coroutine.Current is ApplicationConfigReceivePacket packet ? packet : null;
+        IEnumerator enumerator = NetworkManager.Instance.C_SendPacket<ApplicationConfigReceivePacket>(sendPacket);
+        yield return StartCoroutine(enumerator);    // 서버에 연결 요청 (서버에서 응답이 정상적으로 왔는지 확인 (현재 coroutine.Current는 null) 문제 해결 꼭 yield return 쓰기)
 
-        Debug.Log(coroutine.Current);
-        Debug.Log(receivePacket);
+        ApplicationConfigReceivePacket receivePacket = enumerator.Current is ApplicationConfigReceivePacket packet ? packet : null;
 
-        /// TODO: 서버에서 응답이 정상적으로 왔는지 확인 (현재 coroutine.Current는 null)
+        // Debug.Log(enumerator.Current);
+        // Debug.Log(receivePacket);
 
         if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)    // 서버에서 응답이 성공적으로 왔다면
         {
