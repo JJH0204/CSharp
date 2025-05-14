@@ -7,6 +7,7 @@ public enum PACKET_NAME_TYPE
 {
     None,   // 패킷 이름 없음
     ApplicationConfig,  // 앱 버전, 환경, OS 타입을 서버에 요청하는 패킷 이름
+    Maintenance,    // 점검 패킷
 }
 
 public enum SCENE_TYPE

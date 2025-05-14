@@ -61,10 +61,47 @@ public class InitScene_Init : MonoBehaviour
 
         if (SystemManager.Instance.dEVELOPER_ID_AUTHORITY == DEVELOPER_ID_AUTHORITY.NONE)    // 개발자 인증 실패
         {
-            // TODO: 점검 팝업 띄우기
+            // 점검 팝업 띄우기
+            // 해당 패킷에서 오류가 발생하더라도, 계속 진행하도록 설정
+            IEnumerator maintenance = MaintenancePacket();
+            yield return StartCoroutine(maintenance);
+
+            MaintenanceReceivePacket maintenanceReceivePacket = maintenance.Current is MaintenanceReceivePacket packet ? packet : null;
+
+            if (maintenanceReceivePacket != null && maintenanceReceivePacket.isMaintenance) // 점검 중이라면
+            {
+                GameObject objPopupMessage = Instantiate(systemPopupMessagePrefab, parentPopupMessage);
+
+                PopupMessageInfo popupMessageInfo = new PopupMessageInfo(PopupMessageType.ONE_BUTTON, maintenanceReceivePacket.Title, maintenanceReceivePacket.Contents);
+                PopupMessage popupMessage = objPopupMessage.GetComponent<PopupMessage>();
+                popupMessage.OpenMessage(popupMessageInfo, null, () =>
+                {
+                    Debug.Log("점검 중입니다.");
+                    Application.Quit();    // 앱 종료
+                });
+                yield break;
+            }
         }
 
         yield return StartCoroutine(EtcManager());
+    }
+
+    // 점검 패킷을 수신
+    private IEnumerator MaintenancePacket()
+    {
+        MaintenanceSendPacket sendPacket = new MaintenanceSendPacket(
+            SystemManager.Instance.ApiUrl,
+            PACKET_NAME_TYPE.Maintenance,
+            Config.E_ENVIRONMENT_TYPE,
+            Config.E_OS_TYPE,
+            Config.APP_VERSION,
+            Application.systemLanguage    // 다국어 처리
+            );
+
+        IEnumerator enumerator = NetworkManager.Instance.C_SendPacket<MaintenanceReceivePacket>(sendPacket);
+        yield return StartCoroutine(enumerator);
+
+        yield return enumerator.Current is MaintenanceReceivePacket packet ? packet : null;
     }
 #endif
 
