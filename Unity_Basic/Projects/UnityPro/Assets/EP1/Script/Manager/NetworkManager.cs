@@ -14,9 +14,8 @@ public class CertHandler : CertificateHandler
 
 public class NetworkManager : ManagerBase
 {
+    #region Singleton
     private static NetworkManager instance = null;
-    private string apiUrl;
-
     public static NetworkManager Instance
     {
         get
@@ -33,31 +32,74 @@ public class NetworkManager : ManagerBase
             return instance;
         }
     }
-
+    #endregion
+    #region Variables
+    private string apiUrl;
     public bool IsInit { get; set; } = false;
+    #endregion
 
+    #region Unity Methods
     void Awake()
     {
         DontDestroy<NetworkManager>();
     }
+    #endregion
 
+    #region Methods
     public void SetInit(string apiUrl)
     {
         IsInit = true;
         this.apiUrl = apiUrl;
     }
 
+    public IEnumerator NetworkManagerInit()
+    {
+        yield return null;
+        // 클라 -> 서버: 패킷 생성
+        ApplicationConfigSendPacket sendPacket = new ApplicationConfigSendPacket(
+            Config.SERVER_APP_CONFIG_URL,
+            PACKET_NAME_TYPE.ApplicationConfig,
+            Config.E_ENVIRONMENT_TYPE,
+            Config.E_OS_TYPE,
+            Config.APP_VERSION,
+            SystemManager.Instance.DevelopmentID    // 개발자 ID
+            );
+        // 클라 -> 서버 : 패킷 전송
+        IEnumerator enumerator = CoroutineSendPacket<ApplicationConfigReceivePacket>(sendPacket);
+        yield return StartCoroutine(enumerator);
+
+        // 서버 -> 클라: 패킷 수신
+        ApplicationConfigReceivePacket receivePacket = enumerator.Current is ApplicationConfigReceivePacket packet ? packet : null;
+
+        // 서버 응답 확인
+        if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)
+        // TODO: receivePacket 이 null 인 이유를 찾자
+        {
+            // 서버에서 응답이 성공적으로 왔다면
+            SystemManager.Instance.ApiUrl = receivePacket.ApiUrl;    // 서버에서 내려준 주소를 사용
+            SystemManager.Instance.developerIdAuthority = (DEVELOPER_ID_AUTHORITY)receivePacket.DeveloperIdAuthority;
+            yield return true;
+        }
+        else
+        {
+            // 서버에서 응답이 실패했다면
+            yield return false;
+        }
+    }
+
     // public void SendPacket(SendPacketBase sendPacket)
     // {
-    //     StartCoroutine(C_SendPacket(sendPacket));
+    //     StartCoroutine(CoroutineSendPacket(sendPacket));
     // }
 
-#if By_Call_Back
-    // call-back
-    public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket, Action<ReceivePacketBase> action = null) where T : ReceivePacketBase
+    /// <summary>
+    /// 비동기 패킷 전송을 위한 코루틴 메서드
+    /// </summary>
+    public IEnumerator CoroutineSendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
     {
+        // 보내는 패킷을 JSON 형식으로 변환
         string packet = JsonUtility.ToJson(sendPacket);
-        Debug.Log("[Send packet]: " + packet);
+        // Debug.Log("[Send packet]: " + packet);
 
         // using 으로 UnityWebRequest 객체를 생성, 사용 후 자동으로 해제
         using (UnityWebRequest request = UnityWebRequest.PostWwwForm(apiUrl, packet))
@@ -71,72 +113,47 @@ public class NetworkManager : ManagerBase
             // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
             request.certificateHandler = new CertHandler();
 
-            // Debug.Log("Connected to server: " + apiUrl);
+            // 서버에 요청을 보내고 응답을 기다린다.
             yield return request.SendWebRequest();
 
+            // 요청 결과 확인
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
+                // 연결 오류 또는 프로토콜 오류가 발생했을 때
                 Debug.LogError("Error: " + request.error);
                 yield return null;
-                action?.Invoke(new ReceivePacketBase((int)RETURN_CODE.ERROR));
             }
             else
             {
-                // Debug.Log("Connected to server: " + apiUrl);
                 // 성공적으로 응답을 받았을 때
                 string jsonData = request.downloadHandler.text;
                 Debug.Log("Received data: " + jsonData);
 
                 T receivePacket = JsonUtility.FromJson<T>(jsonData);
                 yield return receivePacket;
-                action?.Invoke(receivePacket);
-
-                // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
-                // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
             }
         }
     }
-#else
-    public IEnumerator C_SendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
+
+    /// <summary>
+    /// 점검 여부 확인 패킷을 송수신
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CoroutineMaintenanceSendPacket()
     {
-        string packet = JsonUtility.ToJson(sendPacket);
-        Debug.Log("[Send packet]: " + packet);
+        MaintenanceSendPacket sendPacket = new MaintenanceSendPacket(
+            SystemManager.Instance.ApiUrl,
+            PACKET_NAME_TYPE.Maintenance,
+            Config.E_ENVIRONMENT_TYPE,
+            Config.E_OS_TYPE,
+            Config.APP_VERSION,
+            Application.systemLanguage    // 다국어 처리
+            );
 
-        // using 으로 UnityWebRequest 객체를 생성, 사용 후 자동으로 해제
-        using (UnityWebRequest request = UnityWebRequest.PostWwwForm(apiUrl, packet))
-        {
-            // http 통신을 위한 POST 요청 생성성
-            byte[] bytes = new System.Text.UTF8Encoding().GetBytes(packet);
-            request.uploadHandler = new UploadHandlerRaw(bytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
+        IEnumerator enumerator = CoroutineSendPacket<MaintenanceReceivePacket>(sendPacket);
+        yield return StartCoroutine(enumerator);
 
-            // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
-            request.certificateHandler = new CertHandler();
-
-            // Debug.Log("Connected to server: " + apiUrl);
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Error: " + request.error);
-                yield return null;
-            }
-            else
-            {
-                // Debug.Log("Connected to server: " + apiUrl);
-                // 성공적으로 응답을 받았을 때
-                string jsonData = request.downloadHandler.text;
-                Debug.Log("Received data: " + jsonData);
-
-                T receivePacket = JsonUtility.FromJson<T>(jsonData);
-                yield return receivePacket;
-                // return receivePacket;
-
-                // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
-                // Debug.Log("ApiUrl: " + applicationConfigReceivePacket.ApiUrl);
-            }
-        }
+        yield return enumerator.Current is MaintenanceReceivePacket packet ? packet : null;
     }
-#endif
+    #endregion
 }

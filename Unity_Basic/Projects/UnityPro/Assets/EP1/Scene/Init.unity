@@ -1054,8 +1054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d091aad1cf6594549b28a0cb256567e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  systemPopupMessagePrefab: {fileID: 5645397411673166201, guid: d6041ca0aa83f42bdafc0b6d7b9e8389, type: 3}
-  systemPopupInputMessagePrefab: {fileID: 5645397411673166201, guid: 56790eda4fb0944648ad6502cf384fc6, type: 3}
+  popupMessagePrefab: {fileID: 5645397411673166201, guid: d6041ca0aa83f42bdafc0b6d7b9e8389, type: 3}
+  popupInputMessagePrefab: {fileID: 5645397411673166201, guid: 56790eda4fb0944648ad6502cf384fc6, type: 3}
   parentPopupMessage: {fileID: 544510067}
 --- !u!1 &2074311493
 GameObject:

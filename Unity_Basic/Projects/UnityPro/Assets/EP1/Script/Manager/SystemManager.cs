@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class SystemManager : ManagerBase
 {
-    // Singleton
-    // 오브젝트가 씬에 하나만 존재하도록 보장하는 패턴
+    #region Singleton
     private static SystemManager instance = null;
 
     public static SystemManager Instance
@@ -25,28 +24,36 @@ public class SystemManager : ManagerBase
             return instance;
         }
     }
+    #endregion
 
+    #region Variables
     public bool IsInit { get; set; } = false;
     public string ApiUrl { get; set; } = string.Empty;
-
-    public string DevelopmentID { get
+    public DEVELOPER_ID_AUTHORITY developerIdAuthority { get; set; } = DEVELOPER_ID_AUTHORITY.NONE;
+    public string DevelopmentID
+    {
+        get
         {
             return PlayerPrefs.GetString("DevelopmentID");
-        } set
+        }
+        set
         {
             PlayerPrefs.SetString("DevelopmentID", value);
         }
     }
+    #endregion
 
-    public DEVELOPER_ID_AUTHORITY dEVELOPER_ID_AUTHORITY { get; set; } = DEVELOPER_ID_AUTHORITY.NONE;
-
+    #region Unity Methods
     private void Awake()
     {
         DontDestroy<SystemManager>();
     }
+    #endregion
 
+    #region Methods
     public void SetInit()
     {
         IsInit = true;
     }
+    #endregion
 }
