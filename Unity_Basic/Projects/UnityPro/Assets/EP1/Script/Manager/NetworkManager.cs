@@ -73,7 +73,6 @@ public class NetworkManager : ManagerBase
 
         // 서버 응답 확인
         if (receivePacket != null && receivePacket.ReturnCode == (int)RETURN_CODE.OK)
-        // TODO: receivePacket 이 null 인 이유를 찾자
         {
             // 서버에서 응답이 성공적으로 왔다면
             SystemManager.Instance.ApiUrl = receivePacket.ApiUrl;    // 서버에서 내려준 주소를 사용
@@ -97,39 +96,51 @@ public class NetworkManager : ManagerBase
     /// </summary>
     public IEnumerator CoroutineSendPacket<T>(SendPacketBase sendPacket) where T : ReceivePacketBase
     {
-        // 보내는 패킷을 JSON 형식으로 변환
         string packet = JsonUtility.ToJson(sendPacket);
-        // Debug.Log("[Send packet]: " + packet);
+        Debug.Log("[Send packet]: " + packet);
 
-        // using 으로 UnityWebRequest 객체를 생성, 사용 후 자동으로 해제
         using (UnityWebRequest request = UnityWebRequest.PostWwwForm(apiUrl, packet))
         {
-            // http 통신을 위한 POST 요청 생성성
             byte[] bytes = new System.Text.UTF8Encoding().GetBytes(packet);
             request.uploadHandler = new UploadHandlerRaw(bytes);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-
-            // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
             request.certificateHandler = new CertHandler();
 
-            // 서버에 요청을 보내고 응답을 기다린다.
             yield return request.SendWebRequest();
 
-            // 요청 결과 확인
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
-                // 연결 오류 또는 프로토콜 오류가 발생했을 때
                 Debug.LogError("Error: " + request.error);
+                Debug.LogError("Response Code: " + request.responseCode);
+                Debug.LogError("Response Text: " + request.downloadHandler.text);
+
+                // 추가 디버깅 로그
+                Debug.LogError("API URL: " + apiUrl);
+                Debug.LogError("Request Headers: " + string.Join(", ", request.GetRequestHeader("Content-Type")));
+
                 yield return null;
             }
             else
             {
-                // 성공적으로 응답을 받았을 때
                 string jsonData = request.downloadHandler.text;
                 Debug.Log("Received data: " + jsonData);
 
-                T receivePacket = JsonUtility.FromJson<T>(jsonData);
+                T receivePacket = null;
+                try
+                {
+                    receivePacket = JsonUtility.FromJson<T>(jsonData);
+                    if (receivePacket == null)
+                    {
+                        Debug.LogError("Failed to parse JSON into packet. JSON: " + jsonData);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("Exception while parsing JSON: " + ex.Message);
+                    Debug.LogError("JSON Data: " + jsonData);
+                }
+
                 yield return receivePacket;
             }
         }
