@@ -66,9 +66,11 @@
   <ItemGroup>
     <Compile Include="Assets/_Project/Script/Runtime/Manager/ManagerBase.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Init.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/Manager/NoteSystemManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/TimeView.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/GameManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/ScoreView.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/Manager/InputManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

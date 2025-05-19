@@ -5,13 +5,8 @@ using UnityEngine;
 
 public class GameManager : ManagerBase
 {
+    #region Singleton
     private static GameManager instance = null;
-
-    [SerializeField]
-    private int nScore = 0;
-    private Timer timer = null;
-    private bool isGameOver = false;
-
     public static GameManager Instance
     {
         get
@@ -28,4 +23,29 @@ public class GameManager : ManagerBase
             return instance;
         }
     }
+    #endregion
+
+    #region Variables
+    [SerializeField]
+    private int nScore = 0;
+    private Timer timer = null;
+    private bool isGameOver = false;
+    #endregion
+
+    #region Unity Methods
+    void Awake()
+    {
+
+    }
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
+    #endregion
 }
