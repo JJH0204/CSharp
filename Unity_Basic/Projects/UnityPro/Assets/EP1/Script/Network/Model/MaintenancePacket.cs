@@ -30,7 +30,7 @@ public class MaintenanceReceivePacket : ReceivePacketBase
     public string Title;    // 점검 제목
     public string Contents;    // 점검 내용
 
-    public MaintenanceReceivePacket(int returnCode, string apiUrl, bool isMaintenance, string title, string contents) : base(returnCode)
+    public MaintenanceReceivePacket(int returnCode, string apiUrl, int DeveloperIdAuthority, bool isMaintenance, string title, string contents) : base(returnCode)
     {
         this.ApiUrl = apiUrl;
         this.DeveloperIdAuthority = DeveloperIdAuthority;
