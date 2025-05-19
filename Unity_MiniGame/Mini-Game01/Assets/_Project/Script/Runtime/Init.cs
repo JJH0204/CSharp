@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Init : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region Variables
+    [SerializeField]
+    private List<ManagerBase> managers = null;
+    #endregion
+
+    #region Unity Methods
+    private void Awake()
     {
+        managers = new List<ManagerBase>
+        {
+            // 메니저 인스턴스 생성
+            GameManager.Instance,
+            InputManager.Instance,
+            NoteSystemManager.Instance
+        };
 
+        // 메니저 초기화
+        foreach (ManagerBase manager in managers)
+        {
+            manager.Init();
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    #endregion
 }

@@ -35,7 +35,7 @@ public class GameManager : ManagerBase
     #region Unity Methods
     void Awake()
     {
-
+        DontDestroy<GameManager>();
     }
 
     void Start()
@@ -46,6 +46,19 @@ public class GameManager : ManagerBase
     void Update()
     {
 
+    }
+    #endregion
+
+    #region Override Methods
+    public override void Init()
+    {
+        // 게임 초기화
+        nScore = 0;
+        isGameOver = false;
+
+        // // 타이머 초기화
+        // timer = new Timer(60);
+        // timer.Start();
     }
     #endregion
 }

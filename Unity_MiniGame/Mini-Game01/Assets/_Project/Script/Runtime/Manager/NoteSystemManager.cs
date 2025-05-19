@@ -24,4 +24,31 @@ public class NoteSystemManager : ManagerBase
         }
     }
     #endregion
+
+    #region Variables
+    #endregion
+
+    #region Unity Methods
+    void Awake()
+    {
+        DontDestroy<NoteSystemManager>();
+    }
+    #endregion
+
+    #region Override Methods
+    public override void Init()
+    {
+        // NoteSystemManager 초기화
+        // 예: 노트 시스템 설정, 이벤트 리스너 등록 등
+    }
+    #endregion
+
+    #region Custom Methods
+    // 노트 시스템 관련 메서드들
+    public void OnInput_Func(KeyCode keyCode)
+    {
+        // 노트 입력 처리
+        Debug.Log("노트 입력: " + keyCode);
+    }
+    #endregion
 }
