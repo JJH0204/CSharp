@@ -1,0 +1,6 @@
+enum NOTE_TYPE
+{
+    APPLE,
+    GOLDAPPLE,
+    ROTTENAPPLE,
+}
