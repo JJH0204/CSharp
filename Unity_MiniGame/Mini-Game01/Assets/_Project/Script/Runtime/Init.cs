@@ -5,8 +5,7 @@ using UnityEngine;
 public class Init : MonoBehaviour
 {
     #region Variables
-    [SerializeField]
-    private List<ManagerBase> managers = null;
+    [SerializeField] private List<ManagerBase> managers = null;
     #endregion
 
     #region Unity Methods
@@ -19,9 +18,11 @@ public class Init : MonoBehaviour
             InputManager.Instance,
             NoteSystemManager.Instance
         };
-
+    }
+    private void Start()
+    {
         // 메니저 초기화
-        foreach (ManagerBase manager in managers)
+        foreach (var manager in managers)
         {
             manager.Init();
         }

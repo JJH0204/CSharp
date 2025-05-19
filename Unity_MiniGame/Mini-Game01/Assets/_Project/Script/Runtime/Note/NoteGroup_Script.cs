@@ -16,34 +16,42 @@ public class NoteGroup_Script : MonoBehaviour
     }
     void Start()
     {
+        Init();
+    }
+    #endregion
+
+    #region Custom Methods
+    // 노트 그룹 초기화
+    private void Init()
+    {
         for (int i = 0; i < nNoteMaxNum; i++)
         {
             GameObject gNoteObj = GameObject.Instantiate(gNotePrefab);
 
             noteList.Add(gNoteObj.GetComponent<Note_Script>());
-        }
-
-        for (int i = 0; i < nNoteMaxNum; i++)
-        {
             noteList[i].SetNotePos(notePosList[i]);
-            // 랜덤으로 노트 타입을 설정
-            // 0 : APPLE, 1 : GOLDAPPLE, 2 : ROTTENAPPLE
-            int randomNum = Random.Range(0, 3);
-            switch (randomNum)
-            {
-                case 0:
-                    noteList[i].SetNoteType(NOTE_TYPE.APPLE);
-                    break;
-                case 1:
-                    noteList[i].SetNoteType(NOTE_TYPE.GOLDAPPLE);
-                    break;
-                case 2:
-                    noteList[i].SetNoteType(NOTE_TYPE.ROTTENAPPLE);
-                    break;
-            }
-            // noteList[i].SetNoteType(Random.Range(0, 3) == 0 ? NOTE_TYPE.APPLE : NOTE_TYPE.BLUEBARRY);
         }
     }
+    // 위치(index)에 해당하는 노트의 속성 반환 메서드
+    public NOTE_TYPE GetNoteType(int index)
+    {
+        if (index < 0 || index >= nNoteMaxNum)
+        {
+            Debug.LogError("Index out of range");
+            return NOTE_TYPE.APPLE;
+        }
+        return noteList[index].GetNoteType();
+    }
+    // 노트 처리 메서드
+    public void NoteProcess()
+    {
+        Destroy(noteList[0].gameObject);
+        noteList.RemoveAt(0);
+        GameObject gNoteObj = GameObject.Instantiate(gNotePrefab);
+        noteList.Add(gNoteObj.GetComponent<Note_Script>());
+        
+        for (int i = 0; i < nNoteMaxNum; i++)
+            noteList[i].SetNotePos(notePosList[i]);
+    }
     #endregion
-
 }

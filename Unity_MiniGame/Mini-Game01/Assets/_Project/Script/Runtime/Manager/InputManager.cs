@@ -26,6 +26,11 @@ public class InputManager : ManagerBase
     #endregion
 
     #region Variables
+
+    #endregion
+
+    #region Cache
+    private GameSceneUI gameSceneUI = null;
     #endregion
 
     #region Unity Methods
@@ -36,25 +41,36 @@ public class InputManager : ManagerBase
 
     void Start()
     {
-
+        if (gameSceneUI == null)
+        {
+            gameSceneUI = FindAnyObjectByType<GameSceneUI>();
+            if (gameSceneUI == null)
+            {
+                Debug.LogError("GameSceneUI not found in the scene.");
+            }
+        }
     }
 
     void Update()
     {
+        // 버리기 단축기 (A)
         if (Input.GetKeyDown(KeyCode.A) == true)
         {
-            NoteSystemManager.Instance.OnInput_Func(KeyCode.A);
+            // NoteSystemManager.Instance.OnInput_Func(KeyCode.A);
+            gameSceneUI.OnClick_ThrowButton();
         }
 
+        // 담기 단축기 (S)
         if (Input.GetKeyDown(KeyCode.S) == true)
         {
-            NoteSystemManager.Instance.OnInput_Func(KeyCode.S);
+            // NoteSystemManager.Instance.OnInput_Func(KeyCode.S);
+            gameSceneUI.OnClick_CatchButton();
         }
 
-        if (Input.GetKeyDown(KeyCode.D) == true)
-        {
-            NoteSystemManager.Instance.OnInput_Func(KeyCode.D);
-        }
+        // if (Input.GetKeyDown(KeyCode.Space) == true)
+        // {
+        //     NoteSystemManager.Instance.OnInput_Func(KeyCode.D);
+        // }
     }
     #endregion
 
