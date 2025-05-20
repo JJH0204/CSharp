@@ -8,8 +8,9 @@ public class InitSceneInit : MonoBehaviour
     [SerializeField] private List<ManagerBase> managers = null;
     [SerializeField] private bool isInit = false;
 
-    private int initCount = 0;
-    private int initMaxCount = 2;
+    [Header("Loading State")]
+    [SerializeField] private int initCount = 0;
+    [SerializeField] private int initMaxCount = 0;
     #endregion
 
     #region cache
@@ -30,8 +31,8 @@ public class InitSceneInit : MonoBehaviour
         managers = new List<ManagerBase>
         {
             // 메니저 인스턴스 생성
-            // GameManager.Instance,
-            // InputManager.Instance,
+            GameManager.Instance,
+            InputManager.Instance,
             NoteSystemManager.Instance,
             SceneLoadManager.Instance
         };

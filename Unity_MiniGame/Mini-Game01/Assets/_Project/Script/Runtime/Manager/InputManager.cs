@@ -26,7 +26,7 @@ public class InputManager : ManagerBase
     #endregion
 
     #region Variables
-    public bool IsInit { get; private set; } = false;
+    // public override bool IsInit { get; private set; } = false;
     #endregion
 
     #region Cache
@@ -41,45 +41,66 @@ public class InputManager : ManagerBase
 
     void Start()
     {
-        if (gameSceneUI == null)
-        {
-            gameSceneUI = FindAnyObjectByType<GameSceneUI>();
-            if (gameSceneUI == null)
-            {
-                Debug.LogError("GameSceneUI not found in the scene.");
-            }
-        }
+        
     }
 
     void Update()
     {
+        // Init(); // 초기화 체크
+        if (!(this.IsInit = Init()))
+            return;
+
         // 버리기 단축기 (A)
-        if (Input.GetKeyDown(KeyCode.A) == true)
+        if (Input.GetKeyDown(KeyCode.A))
         {
             // NoteSystemManager.Instance.OnInput_Func(KeyCode.A);
             gameSceneUI.OnClick_ThrowButton();
         }
 
         // 담기 단축기 (S)
-        if (Input.GetKeyDown(KeyCode.S) == true)
+        if (Input.GetKeyDown(KeyCode.S))
         {
             // NoteSystemManager.Instance.OnInput_Func(KeyCode.S);
             gameSceneUI.OnClick_CatchButton();
         }
-
-        // if (Input.GetKeyDown(KeyCode.Space) == true)
-        // {
-        //     NoteSystemManager.Instance.OnInput_Func(KeyCode.D);
-        // }
     }
-    #endregion
 
-    #region Override Methods
-    public override bool Init()
+    // private void KeyInputCheck()
+    // {
+    //     if (SceneLoadManager.Instance.CurrentSceneType == SCENE_TYPE.GAME)
+    //     {
+            // 버리기 단축기 (A)
+//         if (Input.GetKeyDown(KeyCode.A))
+//         {
+//             // NoteSystemManager.Instance.OnInput_Func(KeyCode.A);
+//             gameSceneUI.OnClick_ThrowButton();
+//         }
+// // 담기 단축기 (S)
+// if (Input.GetKeyDown(KeyCode.S))
+// {
+//     // NoteSystemManager.Instance.OnInput_Func(KeyCode.S);
+//     gameSceneUI.OnClick_CatchButton();
+// }
+//     }
+// }
+#endregion
+
+#region Override Methods
+public override bool Init()
     {
         // InputManager 초기화
-        
-        return IsInit;
+        if (SceneLoadManager.Instance.CurrentSceneType == SCENE_TYPE.GAME)
+        {
+            // 게임 씬에서만 초기화
+            gameSceneUI = FindObjectOfType<GameSceneUI>();
+            if (gameSceneUI == null)
+            {
+                // Debug.LogError("GameSceneUI not found in the scene.");
+                return false;
+            }
+            
+        }
+        return true;
     }
     #endregion
 }

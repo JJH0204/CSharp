@@ -30,6 +30,13 @@ public class SceneLoadManager : ManagerBase
     public SCENE_TYPE CurrentSceneType { get; private set; } = SCENE_TYPE.NONE;
     #endregion
 
+    #region Unity Methods
+    void Awake()
+    {
+        DontDestroy<SceneLoadManager>();
+    }
+    #endregion
+
     #region Override Methods
     public override bool Init()
     {

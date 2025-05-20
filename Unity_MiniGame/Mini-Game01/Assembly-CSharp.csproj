@@ -66,9 +66,11 @@
   <ItemGroup>
     <Compile Include="Assets/_Project/Script/Runtime/InitScene/InitSceneUI.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/ManagerBase.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/TitleScene/TitleSceneInit.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/NoteSystemManager.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/GameScene/GameSceneInit.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/TitleScene/TitleSceneUI.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/InitScene/InitSceneInit.cs" />
-    <Compile Include="Assets/_Project/Script/Runtime/GameScene/GameScene_Init.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Config/Config.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/NoteGroup_Script.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/GameManager.cs" />

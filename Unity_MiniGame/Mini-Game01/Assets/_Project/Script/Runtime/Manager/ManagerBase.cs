@@ -17,6 +17,7 @@ public abstract class ManagerBase : MonoBehaviour
     #endregion
 
     #region 추상화 메서드
+    public bool IsInit { get; protected set; } = false;
     public abstract bool Init(); // 메니저 초기화 메서드
     #endregion
 }

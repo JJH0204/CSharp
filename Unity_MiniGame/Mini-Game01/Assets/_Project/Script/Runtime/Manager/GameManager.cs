@@ -39,7 +39,6 @@ public class GameManager : ManagerBase
     // public bool IsGameReady { get; private set; } = false;
     // public bool IsGameStart { get; private set; } = false;
     // public bool IsGamePause { get; private set; } = false;
-    // public bool IsInit { get; private set; } = false;
     public GAME_STATE GameState { get; private set; } = GAME_STATE.NONE;
     #endregion
 
@@ -62,22 +61,26 @@ public class GameManager : ManagerBase
 
     void Update()
     {
-        // if (IsGameOver == true)
-        // {
-        //     // 게임 오버 상태일 때 처리할 작업
-        //     SceneManager.Instance.LoadScene(SCENE_TYPE.GAMEOVER);
-        //     return;
-        // }
-        // // 게임 진행 중일 때 처리할 작업
+        // 게임 씬이 아닐 경우 Update 처리하지 않음
+        if (SceneLoadManager.Instance.CurrentSceneType != SCENE_TYPE.GAME)
+            return;
+
+        // 게임 매니저가 게임 씬에 도달했을 때 처리할 작업
         switch (GameState)
         {
             case GAME_STATE.NONE:
+                GameState = GAME_STATE.INIT;
                 break;
             case GAME_STATE.INIT:
                 // 게임 준비 상태일 때 처리할 작업
+                if (StartInit())
+                    GameState = GAME_STATE.READY;
                 break;
             case GAME_STATE.READY:
                 // 게임 준비 상태일 때 처리할 작업
+                // 게임 시작 전 3초 대기 카운트
+
+                GameState = GAME_STATE.PLAYING;
                 break;
             case GAME_STATE.PLAYING:
                 // 게임 시작 상태일 때 처리할 작업
@@ -102,38 +105,34 @@ public class GameManager : ManagerBase
     #region Override Methods
     public override bool Init()
     {
-        // 게임 초기화
-        Score = 0;
-        Combo = 0;
-
-
-        // 노트 그룹 오브젝트 초기화
-        objNoteGroup = GameObject.Find("NoteGroup");
-        noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
-        if (noteGroupScript == null)
-        {
-            Debug.LogError("NoteGroup_Script not found.");
-            return false;
-        }
-
-        // 게임 UI 초기화
-        gameSceneUI = FindAnyObjectByType<GameSceneUI>();
-        if (gameSceneUI == null)
-        {
-            Debug.LogError("GameSceneUI not found.");
-            return false;
-        }
-
-        // // 타이머 초기화
-        // timer = new Timer(60);
-        // timer.Start();
-
-        GameState = GAME_STATE.INIT;
+        // 게임 매니저 생성 확인
+        IsInit = true;
         return true;
     }
     #endregion
 
     #region Custom Methods
+    private bool StartInit()
+    {
+        if (SceneLoadManager.Instance.CurrentSceneType == SCENE_TYPE.GAME)
+        {
+            // 게임 초기화
+            Score = 0;
+            Combo = 0;
+
+            // 노트 그룹 오브젝트 초기화
+            StartCoroutine(WaitForNoteGroup());
+
+            // 게임 UI 초기화
+            StartCoroutine(WaitForGameSceneUI());
+
+            // // 타이머 초기화
+            // timer = new Timer(60);
+            // timer.Start();
+        }
+        return true;
+    }
+    
     public void InputProcess(INPUT_TYPE inputType)
     {
         try
@@ -191,6 +190,61 @@ public class GameManager : ManagerBase
         {
             Debug.LogError("Error: " + e.Message);
             return;
+        }
+    }
+    #endregion
+
+    #region Coroutines
+    private IEnumerator WaitForNoteGroup()
+    {
+        while (GameObject.Find("NoteGroup") == null)
+        {
+            Debug.Log("Waiting for NoteGroup GameObject to be created...");
+            yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
+        }
+
+        objNoteGroup = GameObject.Find("NoteGroup");
+        noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
+
+        if (noteGroupScript == null)
+        {
+            Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
+        }
+        else
+        {
+            Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
+        }
+    }
+    private IEnumerator WaitForGameSceneUI()
+    {
+        // while (GameObject.Find("NoteGroup") == null)
+        // {
+        //     Debug.Log("Waiting for NoteGroup GameObject to be created...");
+        //     yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
+        // }
+
+        // objNoteGroup = GameObject.Find("NoteGroup");
+        // noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
+
+        // if (noteGroupScript == null)
+        // {
+        //     Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
+        // }
+        // else
+        // {
+        //     Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
+        // }
+
+        while (FindAnyObjectByType<GameSceneUI>() == null)
+        {
+            Debug.Log("Waiting for GameSceneUI to be created...");
+            yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
+        }
+
+        gameSceneUI = FindAnyObjectByType<GameSceneUI>();
+        if (gameSceneUI == null)
+        {
+            Debug.LogError("GameSceneUI not found.");
         }
     }
     #endregion

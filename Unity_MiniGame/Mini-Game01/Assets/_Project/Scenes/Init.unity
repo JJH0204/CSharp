@@ -254,7 +254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Thanks to Uiseong\nThanks to my friend \uC7AC\uAD6C"
+  m_text: "Thanks to \uC758\uC131\nThanks to my friend \uC7AC\uAD6C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 140ead2b08cef438a8c6b0c66b1a6b5e, type: 2}
   m_sharedMaterial: {fileID: -729134659901362809, guid: 140ead2b08cef438a8c6b0c66b1a6b5e, type: 2}
@@ -1051,6 +1051,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   managers: []
   isInit: 0
+  initCount: 0
+  initMaxCount: 4
 --- !u!4 &2050414716
 Transform:
   m_ObjectHideFlags: 0
