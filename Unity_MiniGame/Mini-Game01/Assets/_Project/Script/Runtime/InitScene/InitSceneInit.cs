@@ -44,7 +44,12 @@ public class InitSceneInit : MonoBehaviour
         // 메니저 초기화
         foreach (var manager in managers)
         {
-            manager.Init();
+            isInit = manager.Init();
+            if (!isInit)
+            {
+                Debug.LogError($"{manager.name} Init Failed");
+                yield break;
+            }
             initCount++;
             yield return new WaitForSeconds(0.5f);
             // 초기화 진행률 표시
@@ -56,7 +61,7 @@ public class InitSceneInit : MonoBehaviour
         // 초기화 완료
         initSceneUI.SetLoadingText("Loading Complete");
         yield return new WaitForSeconds(0.5f);
-
+        // isInit = true;
         // 씬 전환
         SceneLoadManager.Instance.LoadScene(SCENE_TYPE.TITLE);
     }

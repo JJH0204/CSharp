@@ -1,0 +1,8 @@
+{
+    "Score" : {
+        "Apple" : 10,
+        "GoldApple": 20,
+        "RottenApple": -50
+    },
+    "TimeLimit" : 60.0
+}

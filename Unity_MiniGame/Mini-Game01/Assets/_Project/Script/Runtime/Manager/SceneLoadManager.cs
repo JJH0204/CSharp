@@ -26,7 +26,7 @@ public class SceneLoadManager : ManagerBase
     #endregion
 
     #region Variables
-    public bool IsInit { get; private set; } = false;
+    // public bool IsInit { get; private set; } = false;
     public SCENE_TYPE CurrentSceneType { get; private set; } = SCENE_TYPE.NONE;
     #endregion
 

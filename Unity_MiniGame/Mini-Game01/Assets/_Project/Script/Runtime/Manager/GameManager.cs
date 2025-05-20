@@ -228,7 +228,7 @@ public class GameManager : ManagerBase
     {
         while (GameObject.Find("NoteGroup") == null)
         {
-            Debug.Log("Waiting for NoteGroup GameObject to be created...");
+            // Debug.Log("Waiting for NoteGroup GameObject to be created...");
             yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
         }
 
@@ -237,11 +237,11 @@ public class GameManager : ManagerBase
 
         if (noteGroupScript == null)
         {
-            Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
+            // Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
         }
         else
         {
-            Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
+            // Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
         }
     }
     private IEnumerator WaitForGameSceneUI()
@@ -249,7 +249,7 @@ public class GameManager : ManagerBase
 
         while (FindAnyObjectByType<GameSceneUI>() == null)
         {
-            Debug.Log("Waiting for GameSceneUI to be created...");
+            // Debug.Log("Waiting for GameSceneUI to be created...");
             yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
         }
 

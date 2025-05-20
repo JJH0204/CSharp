@@ -30,3 +30,13 @@ public enum GAME_STATE
     GAMEOVER,   // 게임 오버
     END,        // 종료
 }
+
+public class Config
+{
+    public const string APP_NAME = "어서와, 재구네 사과농장";
+    public const string VERSION = "1.0.0";
+    public const string AUTHOR = "Lucian Jung";
+    public const string COPYRIGHT = "Copyright © 2023 Lucian Jung. All rights reserved.";
+
+    public const string GAME_DATA_PATH = "Assets/_Project/Script/Runtime/Data/GameData.json";
+}

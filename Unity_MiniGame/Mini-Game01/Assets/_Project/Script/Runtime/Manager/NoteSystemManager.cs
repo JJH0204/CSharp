@@ -26,7 +26,7 @@ public class NoteSystemManager : ManagerBase
     #endregion
 
     #region Variables
-    public bool IsInit { get; private set; } = false;
+    // public bool IsInit { get; private set; } = false;
     #endregion
 
     #region Unity Methods
