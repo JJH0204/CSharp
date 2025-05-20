@@ -13,22 +13,14 @@ public class Note_Script : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
-        // 랜덤으로 노트 타입을 설정
-        // 0 : APPLE, 1 : GOLDAPPLE, 2 : ROTTENAPPLE
-        // int randomNum = Random.Range(0, 3);
-        // switch (randomNum)
-        // {
-        //     case 0:
-        //         SetNoteType(NOTE_TYPE.APPLE);
-        //         break;
-        //     case 1:
-        //         SetNoteType(NOTE_TYPE.GOLDAPPLE);
-        //         break;
-        //     case 2:
-        //         SetNoteType(NOTE_TYPE.ROTTENAPPLE);
-        //         break;
-        // }
-        SetNoteType((NOTE_TYPE)Random.Range(0, 3));
+        int RandomNum = Random.Range(0, 11);
+        if (RandomNum < 5)
+            SetNoteType(NOTE_TYPE.ROTTENAPPLE);
+        else if (RandomNum < 9)
+            SetNoteType(NOTE_TYPE.APPLE);
+        else
+            SetNoteType(NOTE_TYPE.GOLDAPPLE);
+        // SetNoteType((NOTE_TYPE)Random.Range(0, 3));
     }
     #endregion
 

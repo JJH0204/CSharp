@@ -94,7 +94,7 @@ public class GameManager : ManagerBase
                 {
                     gameTime -= Time.deltaTime;
                 }
-                Debug.Log("게임 시간: " + gameTime);
+                // Debug.Log("게임 시간: " + gameTime);
 
                 break;
             case GAME_STATE.PAUSE:
@@ -104,9 +104,12 @@ public class GameManager : ManagerBase
                 // 게임 오버 상태일 때 처리할 작업
                 // 게임 오버 UI 표시
                 SceneLoadManager.Instance.LoadScene(SCENE_TYPE.GAMEOVER);
+                GameState = GAME_STATE.END;
                 break;
             case GAME_STATE.END:
                 // 게임 종료 상태일 때 처리할 작업
+                // 게임 종료 UI 표시
+                Application.Quit();
                 break;
             default:
                 // 예외 처리
