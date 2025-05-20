@@ -72,6 +72,7 @@
     <Compile Include="Assets/_Project/Script/Runtime/TitleScene/TitleSceneUI.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/InitScene/InitSceneInit.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Config/Config.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/Manager/LocalDataManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/NoteGroup_Script.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/GameManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/Note_Script.cs" />

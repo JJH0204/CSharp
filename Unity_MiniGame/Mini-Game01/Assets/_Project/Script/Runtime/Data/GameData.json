@@ -1,8 +1,8 @@
 {
-    "Score" : {
-        "Apple" : 10,
-        "GoldApple": 20,
-        "RottenApple": -50
-    },
+    "GameName" : "어서와, 재구네 사과농장",
+    "GameVersion" : "1.0.0",
+    "PointApple" : 10,
+    "PointGoldApple": 20,
+    "PointRottenApple": 50,
     "TimeLimit" : 60.0
 }

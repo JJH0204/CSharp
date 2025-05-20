@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class InitSceneInit : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private List<ManagerBase> managers = null;
-    [SerializeField] private bool isInit = false;
+    private List<ManagerBase> managers = null;
+    private bool isInit = false;
+    private int initCount = 0;
 
     [Header("Loading State")]
-    [SerializeField] private int initCount = 0;
     [SerializeField] private int initMaxCount = 0;
     #endregion
 
@@ -34,7 +35,8 @@ public class InitSceneInit : MonoBehaviour
             GameManager.Instance,
             InputManager.Instance,
             NoteSystemManager.Instance,
-            SceneLoadManager.Instance
+            SceneLoadManager.Instance,
+            LocalDataManager.Instance
         };
     }
     private IEnumerator Start()

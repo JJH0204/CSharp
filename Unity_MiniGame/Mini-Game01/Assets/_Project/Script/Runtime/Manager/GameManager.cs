@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 // using System.Threading;
 using Unity.VisualScripting;
-using UnityEditor.SearchService;
+// using UnityEditor.SearchService;
 using UnityEngine;
 
 public class GameManager : ManagerBase
@@ -28,10 +28,10 @@ public class GameManager : ManagerBase
     #endregion
 
     #region SerializeField
-    [SerializeField] private float gameTime = 120.0f; // 게임 시간
     #endregion
 
     #region Variables
+    public float Time { get; private set; } // 게임 시간
     public int Score { get; private set; }
     public int Combo { get; private set; }
     public Timer Timer { get; private set; }
@@ -84,15 +84,15 @@ public class GameManager : ManagerBase
                 break;
             case GAME_STATE.PLAYING:
                 // 게임 시작 상태일 때 처리할 작업
-                gameSceneUI.SetTime(gameTime);
+                gameSceneUI.SetTime(Time);
                 // 게임 시간이 0이 되면 게임 오버 상태로 전환
-                if (gameTime <= 0)
+                if (Time <= 0)
                 {
                     GameState = GAME_STATE.GAMEOVER;
                 }
                 else
                 {
-                    gameTime -= Time.deltaTime;
+                    Time -= UnityEngine.Time.deltaTime;
                 }
                 // Debug.Log("게임 시간: " + gameTime);
 
@@ -134,6 +134,7 @@ public class GameManager : ManagerBase
         if (SceneLoadManager.Instance.CurrentSceneType == SCENE_TYPE.GAME)
         {
             // 게임 초기화
+            Time = LocalDataManager.Instance.GameData.TimeLimit;
             Score = 0;
             Combo = 0;
 
@@ -179,21 +180,21 @@ public class GameManager : ManagerBase
                 if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.APPLE)
                 {
                     // Debug.Log("+10");
-                    Score += 10;
+                    Score += LocalDataManager.Instance.GameData.PointApple;
                     // Debug.Log("콤보 +1");
                     Combo++;
                 }
                 else if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.GOLDAPPLE)
                 {
                     // Debug.Log("+20");
-                    Score += 20;
+                    Score += LocalDataManager.Instance.GameData.PointGoldApple;
                     // Debug.Log("콤보 +1");
                     Combo++;
                 }
                 else
                 {
                     // Debug.Log("-15");
-                    Score -= 15;
+                    Score -= LocalDataManager.Instance.GameData.PointRottenApple;
                     // Debug.Log("콤보 초기화");
                     Combo = 0;
                 }
@@ -204,7 +205,7 @@ public class GameManager : ManagerBase
                 if (noteGroupScript.GetNoteType(0) != NOTE_TYPE.ROTTENAPPLE)
                 {
                     // Debug.Log("-15");
-                    Score -= 15;
+                    Score -= LocalDataManager.Instance.GameData.PointRottenApple;
                     // Debug.Log("콤보 초기화");
                     Combo = 0;
                 }
