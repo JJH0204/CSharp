@@ -9,10 +9,14 @@ public class GameSceneUI : MonoBehaviour
     [Header("GameObjects")]
     [SerializeField] private GameObject Timer = null; // 타이머 UI 오브젝트
     [SerializeField] private GameObject Score = null; // 점수 UI 오브젝트
+    [SerializeField] private GameObject Combo = null; // 콤보 UI 오브젝트
     #endregion
 
     #region Cache
     // 캐시된 컴포넌트들
+    private TimeView timeView = null; // 타이머 UI 컴포넌트
+    private ScoreView scoreView = null; // 점수 UI 컴포넌트
+    private ComboView comboView = null; // 콤보 UI 컴포넌트
     #endregion
 
     #region Unity Methods
@@ -30,14 +34,14 @@ public class GameSceneUI : MonoBehaviour
     // 게임 UI 초기화 메서드
     public void Init()
     {
-        // UI 초기화 작업 수행
-        // 타이머 UI 초기화
-        // TimeView timer = Timer.GetComponent<TimeView>();
-        // timer.Init();
+        // Debug.Log("GameSceneUI Init() 호출됨");
+        timeView = Timer.GetComponent<TimeView>();
+        scoreView = Score.GetComponent<ScoreView>();
+        comboView = Combo.GetComponent<ComboView>();
 
-        // 점수 UI 초기화
-        // ScoreView score = Score.GetComponent<ScoreView>();
-        // score.Init();
+        timeView.Init();
+        scoreView.Init();
+        comboView.Init();
     }
     // Have 버튼
     public void OnClick_CatchButton()
@@ -50,6 +54,17 @@ public class GameSceneUI : MonoBehaviour
     {
         // Debug.Log("Throw 버튼 클릭됨");
         GameManager.Instance.InputProcess(INPUT_TYPE.THROW);
+    }
+
+    public void SetScore(int score)
+    {
+        // Debug.Log("SetScore() 호출됨");
+        scoreView.Score = score;
+    }
+    public void SetCombo(int combo)
+    {
+        // Debug.Log("SetCombo() 호출됨");
+        comboView.Combo = combo;
     }
     #endregion
 }

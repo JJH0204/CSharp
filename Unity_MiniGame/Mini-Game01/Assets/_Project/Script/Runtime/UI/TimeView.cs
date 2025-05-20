@@ -19,7 +19,7 @@ public class TimeView : MonoBehaviour
     {
         timeSlider.maxValue = maxTime;
         timeSlider.value = currentTime;
-        timeText.text = currentTime.ToString("F2");
+        // timeText.text = currentTime.ToString("F2");
     }
     #endregion
 }

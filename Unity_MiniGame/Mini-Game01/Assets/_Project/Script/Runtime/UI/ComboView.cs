@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreView : MonoBehaviour
+public class ComboView : MonoBehaviour
 {
     #region Variables
-    public int Score { set; get; }
+    public int Combo { set; get; }
     #endregion
 
     #region Unity Methods
     void Update()
     {
-        this.gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = Score.ToString();
+        this.gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = Combo.ToString();
     }
     #endregion
 
@@ -19,7 +19,7 @@ public class ScoreView : MonoBehaviour
     // 점수 초기화 메서드
     public void Init()
     {
-        Score = 0;
+        Combo = 0;
     }
     #endregion
 }

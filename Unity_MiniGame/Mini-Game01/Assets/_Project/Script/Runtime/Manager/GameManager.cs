@@ -27,15 +27,25 @@ public class GameManager : ManagerBase
     }
     #endregion
 
+    #region SerializeField
+    [SerializeField] private float gameTime = 120.0f; // 게임 시간
+    #endregion
+
     #region Variables
-    [SerializeField] private int nScore = 0;
-    [SerializeField] private Timer timer = null;
-    [SerializeField] private bool isGameOver = false;
+    public int Score { get; private set; }
+    public int Combo { get; private set; }
+    public Timer Timer { get; private set; }
+    public bool IsGameOver { get; private set; } = false;
+    public bool IsGameReady { get; private set; } = false;
+    public bool IsGameStart { get; private set; } = false;
+    public bool IsGamePause { get; private set; } = false;
+    public bool IsInit { get; private set; } = false;
     #endregion
 
     #region Cache
     private GameObject objNoteGroup = null;
     private NoteGroup_Script noteGroupScript = null;
+    private GameSceneUI gameSceneUI = null;
     #endregion
 
     #region Unity Methods
@@ -51,7 +61,7 @@ public class GameManager : ManagerBase
 
     void Update()
     {
-        if (isGameOver == true)
+        if (IsGameOver == true)
         {
             // 게임 오버 상태일 때 처리할 작업
             SceneManager.Instance.LoadScene(SCENE_TYPE.GAMEOVER);
@@ -66,66 +76,99 @@ public class GameManager : ManagerBase
     public override void Init()
     {
         // 게임 초기화
-        nScore = 0;
-        isGameOver = false;
+        Score = 0;
+        Combo = 0;
+        IsGameOver = false;
+
 
         // 노트 그룹 오브젝트 초기화
         objNoteGroup = GameObject.Find("NoteGroup");
         noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
-        
+        if (noteGroupScript == null)
+        {
+            Debug.LogError("NoteGroup_Script not found.");
+            return;
+        }
+
+        // 게임 UI 초기화
+        gameSceneUI = FindAnyObjectByType<GameSceneUI>();
+        if (gameSceneUI == null)
+        {
+            Debug.LogError("GameSceneUI not found.");
+            return;
+        }
+
         // // 타이머 초기화
         // timer = new Timer(60);
         // timer.Start();
+
+        // 게임 시작
+        IsGameStart = false;
+        IsGamePause = false;
+        IsGameReady = false;
+        IsInit = true;
     }
     #endregion
 
     #region Custom Methods
     public void InputProcess(INPUT_TYPE inputType)
     {
-        // 입력 처리
-        if (inputType == INPUT_TYPE.CATCH)
+        try
         {
-            // Have 버튼 클릭 시 처리할 작업
-            Debug.Log("Have 버튼 클릭됨");
-            // NoteSystemManager.Instance.OnInput_Func(keyCode);
             if (noteGroupScript == null)
             {
                 Debug.LogError("NoteGroup_Script not found.");
                 return;
             }
 
-            if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.APPLE)
+            // 입력 처리
+            if (inputType == INPUT_TYPE.CATCH)
             {
-                Debug.Log("+10");
-                Debug.Log("콤보 +1");
+                // Debug.Log("Have 버튼 클릭됨");
+                if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.APPLE)
+                {
+                    // Debug.Log("+10");
+                    Score += 10;
+                    // Debug.Log("콤보 +1");
+                    Combo++;
+                }
+                else if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.GOLDAPPLE)
+                {
+                    // Debug.Log("+20");
+                    Score += 20;
+                    // Debug.Log("콤보 +1");
+                    Combo++;
+                }
+                else
+                {
+                    // Debug.Log("-15");
+                    Score -= 15;
+                    // Debug.Log("콤보 초기화");
+                    Combo = 0;
+                }
             }
-            else if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.GOLDAPPLE)
+            else if (inputType == INPUT_TYPE.THROW)
             {
-                Debug.Log("+20");
-                Debug.Log("콤보 +1");
+                // Debug.Log("Throw 버튼 클릭됨");
+                if (noteGroupScript.GetNoteType(0) != NOTE_TYPE.ROTTENAPPLE)
+                {
+                    // Debug.Log("-15");
+                    Score -= 15;
+                    // Debug.Log("콤보 초기화");
+                    Combo = 0;
+                }
             }
-            else
-            {
-                Debug.Log("-15");
-                Debug.Log("콤보 초기화");
-            }
+            noteGroupScript.NoteProcess();
+            // Debug.Log("Score: " + Score);
+            // Debug.Log("Combo: " + Combo);
+            gameSceneUI.SetScore(Score);
+            gameSceneUI.SetCombo(Combo);
         }
-        else if (inputType == INPUT_TYPE.THROW)
+        catch (System.Exception e)
         {
-            // Throw 버튼 클릭 시 처리할 작업
-            Debug.Log("Throw 버튼 클릭됨");
-            if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.ROTTENAPPLE)
-            {
-                Debug.Log("+0");
-                Debug.Log("콤보 +0");
-            }
-            else
-            {
-                Debug.Log("-15");
-                Debug.Log("콤보 초기화");
-            }
+            Debug.LogError("Error: " + e.Message);
+            return;
         }
-        noteGroupScript.NoteProcess();
     }
     #endregion
 }

@@ -75,6 +75,7 @@
     <Compile Include="Assets/_Project/Script/Runtime/Manager/SceneManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/InputManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/ScoreView.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/UI/ComboView.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/TimeView.cs" />
   </ItemGroup>
   <ItemGroup>
