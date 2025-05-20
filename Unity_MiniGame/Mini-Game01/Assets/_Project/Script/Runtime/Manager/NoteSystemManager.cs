@@ -26,6 +26,7 @@ public class NoteSystemManager : ManagerBase
     #endregion
 
     #region Variables
+    public bool IsInit { get; private set; } = false;
     #endregion
 
     #region Unity Methods
@@ -36,10 +37,11 @@ public class NoteSystemManager : ManagerBase
     #endregion
 
     #region Override Methods
-    public override void Init()
+    public override bool Init()
     {
         // NoteSystemManager 초기화
         // 예: 노트 시스템 설정, 이벤트 리스너 등록 등
+        return IsInit = true;
     }
     #endregion
 

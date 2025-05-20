@@ -26,7 +26,7 @@ public class InputManager : ManagerBase
     #endregion
 
     #region Variables
-
+    public bool IsInit { get; private set; } = false;
     #endregion
 
     #region Cache
@@ -75,10 +75,11 @@ public class InputManager : ManagerBase
     #endregion
 
     #region Override Methods
-    public override void Init()
+    public override bool Init()
     {
         // InputManager 초기화
-        // 예: 키 입력 설정, 이벤트 리스너 등록 등
+        
+        return IsInit;
     }
     #endregion
 }

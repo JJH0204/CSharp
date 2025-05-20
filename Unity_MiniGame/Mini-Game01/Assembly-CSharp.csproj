@@ -64,18 +64,20 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.61f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/_Project/Script/Runtime/InitScene/InitSceneUI.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/ManagerBase.cs" />
-    <Compile Include="Assets/_Project/Script/Runtime/Init.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/NoteSystemManager.cs" />
-    <Compile Include="Assets/_Project/Script/Runtime/UI/GameSceneUI.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/InitScene/InitSceneInit.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/GameScene/GameScene_Init.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Config/Config.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/NoteGroup_Script.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/GameManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/Note_Script.cs" />
-    <Compile Include="Assets/_Project/Script/Runtime/Manager/SceneManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/InputManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/ScoreView.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/Manager/SceneLoadManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/ComboView.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/GameScene/GameSceneUI.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/TimeView.cs" />
   </ItemGroup>
   <ItemGroup>
