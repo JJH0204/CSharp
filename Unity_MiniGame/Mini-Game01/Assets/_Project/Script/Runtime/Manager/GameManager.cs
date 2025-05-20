@@ -84,12 +84,26 @@ public class GameManager : ManagerBase
                 break;
             case GAME_STATE.PLAYING:
                 // 게임 시작 상태일 때 처리할 작업
+                gameSceneUI.SetTime(gameTime);
+                // 게임 시간이 0이 되면 게임 오버 상태로 전환
+                if (gameTime <= 0)
+                {
+                    GameState = GAME_STATE.GAMEOVER;
+                }
+                else
+                {
+                    gameTime -= Time.deltaTime;
+                }
+                Debug.Log("게임 시간: " + gameTime);
+
                 break;
             case GAME_STATE.PAUSE:
                 // 게임 일시 정지 상태일 때 처리할 작업
                 break;
             case GAME_STATE.GAMEOVER:
                 // 게임 오버 상태일 때 처리할 작업
+                // 게임 오버 UI 표시
+                SceneLoadManager.Instance.LoadScene(SCENE_TYPE.GAMEOVER);
                 break;
             case GAME_STATE.END:
                 // 게임 종료 상태일 때 처리할 작업
@@ -129,8 +143,20 @@ public class GameManager : ManagerBase
             // // 타이머 초기화
             // timer = new Timer(60);
             // timer.Start();
+
+            // 모든 코루틴이 완료되면 true 반환
+            if (objNoteGroup != null && noteGroupScript != null && gameSceneUI != null)
+            {
+                // Debug.Log("모든 초기화 완료");
+                return true;
+            }
+            else
+            {
+                // Debug.Log("초기화 대기 중...");
+                return false;
+            }
         }
-        return true;
+        return false;
     }
     
     public void InputProcess(INPUT_TYPE inputType)
@@ -217,23 +243,6 @@ public class GameManager : ManagerBase
     }
     private IEnumerator WaitForGameSceneUI()
     {
-        // while (GameObject.Find("NoteGroup") == null)
-        // {
-        //     Debug.Log("Waiting for NoteGroup GameObject to be created...");
-        //     yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
-        // }
-
-        // objNoteGroup = GameObject.Find("NoteGroup");
-        // noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
-
-        // if (noteGroupScript == null)
-        // {
-        //     Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
-        // }
-        // else
-        // {
-        //     Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
-        // }
 
         while (FindAnyObjectByType<GameSceneUI>() == null)
         {

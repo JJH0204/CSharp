@@ -66,5 +66,11 @@ public class GameSceneUI : MonoBehaviour
         // Debug.Log("SetCombo() 호출됨");
         comboView.Combo = combo;
     }
+
+    public void SetTime(float time)
+    {
+        // Debug.Log("SetTime() 호출됨");
+        timeView.StartTimer(time);
+    }
     #endregion
 }
