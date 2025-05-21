@@ -448,8 +448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da5f59c3789a4ec58540d9ca074d8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadingSlider: {fileID: 634503547}
-  LoadingText: {fileID: 0}
+  loadingSlider: {fileID: 634503547}
 --- !u!1 &416418361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,7 +1048,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1960808faaf24860a1fcb7b66391cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initMaxCount: 5
+  initMaxCount: 4
+  objInitSceneUI: {fileID: 375512655}
 --- !u!4 &2050414716
 Transform:
   m_ObjectHideFlags: 0

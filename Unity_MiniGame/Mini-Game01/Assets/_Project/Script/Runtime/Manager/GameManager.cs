@@ -1,225 +1,221 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-// using System.Threading;
-using Unity.VisualScripting;
-// using UnityEditor.SearchService;
 using UnityEngine;
-
 public class GameManager : ManagerBase
 {
     #region Singleton
-    private static GameManager instance = null;
-    public static GameManager Instance
+    private static GameManager _instance;
+    public static GameManager instance
     {
         get
         {
-            if (instance == null)
+            if (_instance is null)
             {
-                instance = FindObjectOfType<GameManager>();
-                if (instance == null)
+                _instance = FindObjectOfType<GameManager>();
+                if (_instance is null)
                 {
                     GameObject obj = new GameObject("GameManager");
-                    instance = obj.AddComponent<GameManager>();
+                    _instance = obj.AddComponent<GameManager>();
                 }
             }
-            return instance;
+            return _instance;
         }
     }
     #endregion
 
-    #region SerializeField
-    #endregion
-
     #region Variables
-    public float Time { get; private set; } // 게임 시간
-    public int Score { get; private set; }
-    public int Combo { get; private set; }
-    public Timer Timer { get; private set; }
-    // public bool IsGameOver { get; private set; } = false;
-    // public bool IsGameReady { get; private set; } = false;
-    // public bool IsGameStart { get; private set; } = false;
-    // public bool IsGamePause { get; private set; } = false;
-    public GAME_STATE GameState { get; private set; } = GAME_STATE.NONE;
+
+    private float _time;
+    private UserData _userData;
+    private GameState gameState { get; set; } = GameState.None;
+    private bool _saveHistoryDataJsonFile = false;
+    
     #endregion
 
     #region Cache
-    private GameObject objNoteGroup = null;
-    private NoteGroup_Script noteGroupScript = null;
-    private GameSceneUI gameSceneUI = null;
+    
+    // private GameObject _objNoteGroup;
+    private NoteGroup_Script _noteGroupScript;
+    private GameSceneUI _gameSceneUI;
+    
     #endregion
 
     #region Unity Methods
     void Awake()
     {
         DontDestroy<GameManager>();
-    }
-
-    void Start()
-    {
-
+        _userData = new UserData();
     }
 
     void Update()
     {
-        // 게임 씬이 아닐 경우 Update 처리하지 않음
-        if (SceneLoadManager.Instance.CurrentSceneType != SCENE_TYPE.GAME)
-            return;
-
-        // 게임 매니저가 게임 씬에 도달했을 때 처리할 작업
-        switch (GameState)
+        if (SceneLoadManager.instance.IsSceneGame())
         {
-            case GAME_STATE.NONE:
-                GameState = GAME_STATE.INIT;
-                break;
-            case GAME_STATE.INIT:
-                // 게임 준비 상태일 때 처리할 작업
-                if (StartInit())
-                    GameState = GAME_STATE.READY;
-                break;
-            case GAME_STATE.READY:
-                // 게임 준비 상태일 때 처리할 작업
-                // 게임 시작 전 3초 대기 카운트
+            gameState = GameProcess(gameState);
+        }
+    }
 
-                GameState = GAME_STATE.PLAYING;
+    private GameState GameProcess(GameState state)
+    {
+        GameState newState = state;
+        // 게임 매니저가 게임 씬에 도달했을 때 처리할 작업
+        switch (state)
+        {
+            case GameState.None:
+                newState = GameState.Init;
                 break;
-            case GAME_STATE.PLAYING:
-                // 게임 시작 상태일 때 처리할 작업
-                gameSceneUI.SetTime(Time);
-                // 게임 시간이 0이 되면 게임 오버 상태로 전환
-                if (Time <= 0)
+            case GameState.Init:
+                if (Init())
+                    newState =  GameState.Ready;
+                break;
+            case GameState.Ready:
+                // TODO: 게임 시작 전 3초 카운트다운 구현
+                newState = GameState.Playing;
+                break;
+            case GameState.Playing:
+                if (IsGameOver())
                 {
-                    GameState = GAME_STATE.GAMEOVER;
+                    _time = 0;
+                    newState = GameState.GameOver;  // 게임 오버 상태로 전환
                 }
-                else
-                {
-                    Time -= UnityEngine.Time.deltaTime;
-                }
-                // Debug.Log("게임 시간: " + gameTime);
+                
+                _time -= Time.deltaTime;    // 시간 경과 처리
+                _gameSceneUI.SetTime(_time); // 게임 UI에 남은 시간 표시
 
                 break;
-            case GAME_STATE.PAUSE:
-                // 게임 일시 정지 상태일 때 처리할 작업
+            case GameState.Pause:
+                /// TODO: 게임 일시 정지 기능 구현
+                /// 1. 일시 정지 UI 표시
+                /// 2. 게임 진행 중지
+                /// 3. 일시 정지 해제 기능 구현
+
                 break;
-            case GAME_STATE.GAMEOVER:
-                // 게임 오버 상태일 때 처리할 작업
-                // 게임 오버 UI 표시
-                SceneLoadManager.Instance.LoadScene(SCENE_TYPE.GAMEOVER);
-                GameState = GAME_STATE.END;
-                break;
-            case GAME_STATE.END:
-                // 게임 종료 상태일 때 처리할 작업
-                // 게임 종료 UI 표시
-                Application.Quit();
+            case GameState.GameOver:
+                // TODO: 게임 오버 팝업의 버튼 클릭에 따라 씬 전환 처리
+                _gameSceneUI.SetEndingPopup(true, _userData, () => { }, () => { }, Application.Quit);
+                
+                // TODO: 게임 진행 결과 히스토리 저장
+                if (!_saveHistoryDataJsonFile)
+                    _saveHistoryDataJsonFile = LocalDataManager.instance.SaveHistoryDataJsonFile(_userData); 
+                // TODO: 다시하기 버튼 클릭 시 _saveHistoryDataJsonFile = false; 실행
+                
                 break;
             default:
                 // 예외 처리
                 Debug.LogError("Invalid game state.");
                 break;
         }
+        return newState;
     }
-    #endregion
 
-    #region Override Methods
-    public override bool Init()
+    // 게임 종료 조건 검사
+    private bool IsGameOver()
     {
-        // 게임 매니저 생성 확인
-        IsInit = true;
-        return true;
+        return _time <= 0;
     }
+
     #endregion
 
     #region Custom Methods
-    private bool StartInit()
+    // 게임이 진행중인지를 반환하는 메서드
+    public bool IsGamePlaying()
     {
-        if (SceneLoadManager.Instance.CurrentSceneType == SCENE_TYPE.GAME)
-        {
-            // 게임 초기화
-            Time = LocalDataManager.Instance.GameData.TimeLimit;
-            Score = 0;
-            Combo = 0;
-
-            // 노트 그룹 오브젝트 초기화
-            StartCoroutine(WaitForNoteGroup());
-
-            // 게임 UI 초기화
-            StartCoroutine(WaitForGameSceneUI());
-
-            // // 타이머 초기화
-            // timer = new Timer(60);
-            // timer.Start();
-
-            // 모든 코루틴이 완료되면 true 반환
-            if (objNoteGroup != null && noteGroupScript != null && gameSceneUI != null)
-            {
-                // Debug.Log("모든 초기화 완료");
-                return true;
-            }
-            else
-            {
-                // Debug.Log("초기화 대기 중...");
-                return false;
-            }
-        }
-        return false;
+        return gameState == GameState.Playing;
     }
     
-    public void InputProcess(INPUT_TYPE inputType)
+    // 게임 초기화 (점수, 콤보, 노트 그룹 오브젝트, 게임 UI 등)
+    private bool Init()
     {
+        if (!SceneLoadManager.instance.IsSceneGame())
+        {
+            // Debug.Log("게임 씬이 아닙니다.");
+            return false;
+        }
+
+        // 게임 초기화
+        _time = LocalDataManager.instance.gameData.TimeLimit;
+        _userData = new UserData();
+        
+        // 노트 그룹 오브젝트 초기화
+        StartCoroutine(WaitForNoteGroup());
+
+        // 게임 UI 초기화
+        StartCoroutine(WaitForGameSceneUI());
+
+        // 모든 코루틴이 완료되면 true 반환
+        return _noteGroupScript is not null && _gameSceneUI is not null;
+    }
+    
+    // 게임 재시작 시 기존 인스턴스 삭제
+    public void CleanUp()
+    {
+        if (gameState != GameState.GameOver)
+            return;
+        
+        if (_noteGroupScript is not null || _gameSceneUI is not null)
+        {
+            _noteGroupScript = null;
+            _gameSceneUI = null;
+        }
+    }
+
+    public void InputProcess(InputType inputType)
+    {
+        // 게임 진행 중에만 입력 받도록 조건문 추가
+        if (!IsGamePlaying())
+        {
+            // Debug.Log("게임이 진행 중이 아닙니다.");
+            return;
+        }
+        
         try
         {
-            if (noteGroupScript == null)
+            if (_noteGroupScript is null)
             {
                 Debug.LogError("NoteGroup_Script not found.");
                 return;
             }
 
             // 입력 처리
-            if (inputType == INPUT_TYPE.CATCH)
+            if (inputType == InputType.Catch)
             {
                 // Debug.Log("Have 버튼 클릭됨");
-                if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.APPLE)
+                if (_noteGroupScript.GetNoteType(0) == NoteType.Apple)
                 {
-                    // Debug.Log("+10");
-                    Score += LocalDataManager.Instance.GameData.PointApple;
-                    // Debug.Log("콤보 +1");
-                    Combo++;
+                    _userData.totalScore += LocalDataManager.instance.gameData.PointApple;
+                    _userData.currentCombo++;
                 }
-                else if (noteGroupScript.GetNoteType(0) == NOTE_TYPE.GOLDAPPLE)
+                else if (_noteGroupScript.GetNoteType(0) == NoteType.GoldApple)
                 {
-                    // Debug.Log("+20");
-                    Score += LocalDataManager.Instance.GameData.PointGoldApple;
-                    // Debug.Log("콤보 +1");
-                    Combo++;
+                    _userData.totalScore += LocalDataManager.instance.gameData.PointGoldApple;
+                    _userData.currentCombo++;
                 }
                 else
                 {
-                    // Debug.Log("-15");
-                    Score -= LocalDataManager.Instance.GameData.PointRottenApple;
-                    // Debug.Log("콤보 초기화");
-                    Combo = 0;
+                    _userData.totalScore -= LocalDataManager.instance.gameData.PointRottenApple;
+                    _userData.currentCombo = 0;
                 }
             }
-            else if (inputType == INPUT_TYPE.THROW)
+            else if (inputType == InputType.Throw)
             {
                 // Debug.Log("Throw 버튼 클릭됨");
-                if (noteGroupScript.GetNoteType(0) != NOTE_TYPE.ROTTENAPPLE)
+                if (_noteGroupScript.GetNoteType(0) != NoteType.RottenApple)
                 {
-                    // Debug.Log("-15");
-                    Score -= LocalDataManager.Instance.GameData.PointRottenApple;
-                    // Debug.Log("콤보 초기화");
-                    Combo = 0;
+                    _userData.totalScore -= LocalDataManager.instance.gameData.PointRottenApple;
+                    _userData.currentCombo = 0;
+                }
+                else
+                {
+                    _userData.currentCombo++;
                 }
             }
-            noteGroupScript.NoteProcess();
-            // Debug.Log("Score: " + Score);
-            // Debug.Log("Combo: " + Combo);
-            gameSceneUI.SetScore(Score);
-            gameSceneUI.SetCombo(Combo);
+            _noteGroupScript.NoteProcess();
+            _gameSceneUI.SetScore(_userData.totalScore);
+            _gameSceneUI.SetCombo(_userData.currentCombo);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError("Error: " + e.Message);
-            return;
         }
     }
     #endregion
@@ -227,37 +223,19 @@ public class GameManager : ManagerBase
     #region Coroutines
     private IEnumerator WaitForNoteGroup()
     {
-        while (GameObject.Find("NoteGroup") == null)
+        while (_noteGroupScript is null)
         {
-            // Debug.Log("Waiting for NoteGroup GameObject to be created...");
-            yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
+            yield return new WaitForSeconds(0.5f);
+            _noteGroupScript = GameSceneInit.instance.GetNoteGroupScript();
         }
-
-        objNoteGroup = GameObject.Find("NoteGroup");
-        noteGroupScript = objNoteGroup.GetComponent<NoteGroup_Script>();
-
-        if (noteGroupScript == null)
-        {
-            // Debug.LogError("NoteGroup_Script not found after NoteGroup creation.");
-        }
-        else
-        {
-            // Debug.Log("NoteGroup and NoteGroup_Script successfully initialized.");
-        }
+        
     }
     private IEnumerator WaitForGameSceneUI()
     {
-
-        while (FindAnyObjectByType<GameSceneUI>() == null)
+        while (_gameSceneUI is null)
         {
-            // Debug.Log("Waiting for GameSceneUI to be created...");
-            yield return new WaitForSeconds(0.5f); // 0.5초 간격으로 확인
-        }
-
-        gameSceneUI = FindAnyObjectByType<GameSceneUI>();
-        if (gameSceneUI == null)
-        {
-            Debug.LogError("GameSceneUI not found.");
+            yield return new WaitForSeconds(0.5f);
+            _gameSceneUI = GameSceneInit.instance.GetGameSceneUI();
         }
     }
     #endregion

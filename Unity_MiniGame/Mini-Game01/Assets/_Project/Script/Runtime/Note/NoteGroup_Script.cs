@@ -33,12 +33,12 @@ public class NoteGroup_Script : MonoBehaviour
         }
     }
     // 위치(index)에 해당하는 노트의 속성 반환 메서드
-    public NOTE_TYPE GetNoteType(int index)
+    public NoteType GetNoteType(int index)
     {
         if (index < 0 || index >= nNoteMaxNum)
         {
             Debug.LogError("Index out of range");
-            return NOTE_TYPE.APPLE;
+            return NoteType.Apple;
         }
         return noteList[index].GetNoteType();
     }

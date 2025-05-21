@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class TitleSceneInit : MonoBehaviour
 {
-    #region Variables
+    #region SerializeField
+    [Header("Title Scene UI")]
+    [SerializeField] private TitleSceneUI titleSceneUI = null;
     #endregion
 
     #region Cache
@@ -16,6 +18,11 @@ public class TitleSceneInit : MonoBehaviour
     {
         CheckInit();
     }
+    
+    void Start()
+    {
+        
+    }
     #endregion
 
     #region Methods
@@ -25,7 +32,7 @@ public class TitleSceneInit : MonoBehaviour
         if (managers.Length < 1)
         {
             // 생성되된 매니저가 없다면 Init씬으로 이동
-            SceneLoadManager.Instance.LoadScene(SCENE_TYPE.INIT);
+            SceneLoadManager.instance.LoadScene(SceneType.Init);
         }
     }
     #endregion

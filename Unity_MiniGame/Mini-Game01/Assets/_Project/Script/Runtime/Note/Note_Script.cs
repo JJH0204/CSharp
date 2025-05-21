@@ -8,18 +8,18 @@ public class Note_Script : MonoBehaviour
     #region Variables
     [SerializeField] private List<Sprite> NoteSpriteList = null; // 노트 스프라이트 리스트
     [SerializeField] private GameObject ChildObj = null; // Note의 자식 오브젝트
-    [SerializeField] private NOTE_TYPE noteType;    // Note의 타입
+    [SerializeField] private NoteType noteType;    // Note의 타입
     #endregion
     #region Unity Methods
     private void Awake()
     {
         int RandomNum = Random.Range(0, 11);
         if (RandomNum < 5)
-            SetNoteType(NOTE_TYPE.ROTTENAPPLE);
+            SetNoteType(NoteType.RottenApple);
         else if (RandomNum < 9)
-            SetNoteType(NOTE_TYPE.APPLE);
+            SetNoteType(NoteType.Apple);
         else
-            SetNoteType(NOTE_TYPE.GOLDAPPLE);
+            SetNoteType(NoteType.GoldApple);
         // SetNoteType((NOTE_TYPE)Random.Range(0, 3));
     }
     #endregion
@@ -32,14 +32,14 @@ public class Note_Script : MonoBehaviour
     }
 
     // 노트의 타입을 설정하는 메서드
-    internal void SetNoteType(NOTE_TYPE noteType)
+    internal void SetNoteType(NoteType noteType)
     {
         this.noteType = noteType;
         ChildObj.GetComponent<SpriteRenderer>().sprite = NoteSpriteList[(int)noteType];
     }
 
     // 노트의 타입을 가져오는 메서드
-    internal NOTE_TYPE GetNoteType()
+    internal NoteType GetNoteType()
     {
         return noteType;
     }

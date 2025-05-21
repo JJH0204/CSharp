@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ManagerBase : MonoBehaviour
 {
-    #region 공유 메서드
+    #region Shared Methods
+    
     protected void DontDestroy<T>() where T : Object
     {
         T[] managers = FindObjectsByType<T>(FindObjectsSortMode.None);
@@ -14,10 +13,11 @@ public abstract class ManagerBase : MonoBehaviour
         else
             DontDestroyOnLoad(gameObject);
     }
-    #endregion
 
-    #region 추상화 메서드
-    public bool IsInit { get; protected set; } = false;
-    public abstract bool Init(); // 메니저 초기화 메서드
+    public bool IsInstance()
+    {
+        return true;
+    }
+    
     #endregion
 }
