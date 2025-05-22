@@ -36,9 +36,12 @@ public class NetworkManager : ManagerBase
 
     public bool IsInit { get; set; } = false;
 
+    private InitScene_UI initSceneUI;
+
     void Awake()
     {
         DontDestroy<NetworkManager>();
+        initSceneUI = FindObjectOfType<InitScene_UI>();
     }
 
     public void SetInit(string apiUrl)
@@ -114,6 +117,8 @@ public class NetworkManager : ManagerBase
             // HTTPS 요청을 위한 추가 설정: Ignore SSL certificate errors
             request.certificateHandler = new CertHandler();
 
+            initSceneUI.LoadingGear.OnEnable();
+
             // Debug.Log("Connected to server: " + apiUrl);
             yield return request.SendWebRequest();
 
@@ -121,6 +126,7 @@ public class NetworkManager : ManagerBase
             {
                 Debug.LogError("Error: " + request.error);
                 yield return null;
+                initSceneUI.LoadingGear.OnDisable();
             }
             else
             {
@@ -131,6 +137,8 @@ public class NetworkManager : ManagerBase
 
                 T receivePacket = JsonUtility.FromJson<T>(jsonData);
                 yield return receivePacket;
+
+                initSceneUI.LoadingGear.OnDisable();
                 // return receivePacket;
 
                 // Debug.Log("ReturnCode: " + applicationConfigReceivePacket.ReturnCode);
