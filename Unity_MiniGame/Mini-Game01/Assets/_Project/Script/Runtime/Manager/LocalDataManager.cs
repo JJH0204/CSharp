@@ -19,14 +19,14 @@ public class LocalDataManager : ManagerBase
             return null;
         }
 
-        string jsonFilePath = Config.GameDataPath + "/HistoryData.json";
+        var jsonFilePath = Config.GameDataPath + "HistoryData.json";
         if (!File.Exists(jsonFilePath))
         {
             Debug.LogError("게임 데이터 파일이 존재하지 않습니다: " + jsonFilePath);
             return null;
         }
 
-        string jsonData = File.ReadAllText(jsonFilePath);
+        var jsonData = File.ReadAllText(jsonFilePath);
         
         try
         {
@@ -38,15 +38,12 @@ public class LocalDataManager : ManagerBase
             return null;
         }
 
-        if (historyData == null)
-        {
-            Debug.LogError("게임 데이터 파싱에 실패했습니다. JSON 구조를 확인하세요.");
-            return null;
-        }
-        
-        return historyData;
+        if (historyData is not null) return historyData;
+        Debug.LogError("게임 데이터 파싱에 실패했습니다. JSON 구조를 확인하세요.");
+        return null;
     }
-
+    
+    // TODO: 점수 저장 메서드 구현
     public bool SaveHistoryDataJsonFile(UserData userData)
     {
         // 지정된 경로에 HistoryData 객체를 JSON 형식으로 저장합니다.
@@ -59,21 +56,20 @@ public class LocalDataManager : ManagerBase
         historyData.BestScore = historyData.BestScore < userData.totalScore ? userData.totalScore : historyData.BestScore;
         historyData.HighCombo = historyData.HighCombo < userData.currentCombo ? userData.currentCombo : historyData.HighCombo;
         
-        string jsonFilePath = Config.GameDataPath + "/HistoryData.json";
+        const string jsonFilePath = Config.GameDataPath + "HistoryData.json";
         
-        string jsonData = JsonUtility.ToJson(historyData, true);
+        var jsonData = JsonUtility.ToJson(historyData, true);
         try
         {
             File.WriteAllText(jsonFilePath, jsonData);
-            Debug.Log("HistoryData 저장 완료: " + jsonFilePath);
+            // Debug.Log("HistoryData 저장 완료: " + jsonFilePath);
+            // UnityEditor.AssetDatabase.Refresh(); // TODO: 빌드 할때 에러가 발생한다.
         }
         catch (Exception e)
         {
             Debug.LogError("JSON 저장 중 오류 발생: " + e.Message);
             return false;
         }
-
-        UnityEditor.AssetDatabase.Refresh();
         return true;
     }
 
@@ -85,14 +81,14 @@ public class LocalDataManager : ManagerBase
             return null;
         }
 
-        string jsonFilePath = Config.GameDataPath + "/GameData.json";
+        const string jsonFilePath = Config.GameDataPath + "GameData.json";
         if (!File.Exists(jsonFilePath))
         {
             Debug.LogError("게임 데이터 파일이 존재하지 않습니다: " + jsonFilePath);
             return null;
         }
 
-        string jsonData = File.ReadAllText(jsonFilePath);
+        var jsonData = File.ReadAllText(jsonFilePath);
         
         try
         {

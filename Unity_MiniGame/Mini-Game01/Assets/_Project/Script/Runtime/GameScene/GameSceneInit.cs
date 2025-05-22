@@ -26,7 +26,7 @@ public class GameSceneInit : MonoBehaviour
     #region Cache
 
     private GameObject _noteGroup;
-    private NoteGroup_Script _noteGroupScript;
+    private NoteGroupScript _noteGroupScript;
     
     #endregion
 
@@ -34,8 +34,7 @@ public class GameSceneInit : MonoBehaviour
     private void Awake()
     {
         CheckInit();
-        if (!Init()) return;
-        Debug.Log("GameSceneInit has been init");
+        if (!Init()) Debug.LogError($"{nameof(GameSceneInit)} init failed");
     }
 
     #endregion
@@ -45,7 +44,7 @@ public class GameSceneInit : MonoBehaviour
     private bool Init()
     {
         _noteGroup = GameObject.Instantiate(noteGroupPrefab);
-        _noteGroupScript = _noteGroup.GetComponent<NoteGroup_Script>();
+        _noteGroupScript = _noteGroup.GetComponent<NoteGroupScript>();
         return _noteGroup is not null || _noteGroupScript is not null;
     }
     private void CheckInit()
@@ -61,7 +60,7 @@ public class GameSceneInit : MonoBehaviour
         return gameSceneUI.GetComponent<GameSceneUI>();
     }
     
-    public NoteGroup_Script GetNoteGroupScript()
+    public NoteGroupScript GetNoteGroupScript()
     {
         return _noteGroupScript;
     }

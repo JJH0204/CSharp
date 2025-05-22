@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TitleSceneUI : MonoBehaviour
 {
     #region SerializeField
+    
     [Header("Title Scene UI")]
-    [SerializeField] private GameObject TitleLogo = null; // 타이틀 로고
-    [SerializeField] private GameObject StartButton = null; // 시작 버튼
-    [SerializeField] private GameObject ExitButton = null; // 종료 버튼
-    [SerializeField] private GameObject OptionButton = null; // 옵션 버튼
+    [FormerlySerializedAs("TitleLogo")] [SerializeField] private GameObject titleLogo; // 타이틀 로고
+    [FormerlySerializedAs("StartButton")] [SerializeField] private GameObject startButton; // 시작 버튼
+    [FormerlySerializedAs("ExitButton")] [SerializeField] private GameObject exitButton; // 종료 버튼
+    [FormerlySerializedAs("OptionButton")] [SerializeField] private GameObject optionButton; // 옵션 버튼
     
     [Header("Popup")]
-    [SerializeField] private GameObject SettingPopup = null; // 설정 팝업
+    [FormerlySerializedAs("SettingPopup")] [SerializeField] private GameObject settingPopup; // 설정 팝업
     #endregion
 
     #region OnClick Methods
@@ -21,8 +21,6 @@ public class TitleSceneUI : MonoBehaviour
     {
         // 게임 시작 로직
         // Debug.Log("게임 시작");
-        // GameManager.Instance.gameState = GAME_STATE.PLAYING;
-        // GameManager.Instance.Init();
         SceneLoadManager.instance.LoadScene(SceneType.Game);
         
     }
@@ -30,7 +28,7 @@ public class TitleSceneUI : MonoBehaviour
     public void OnClickExitButton()
     {
         // 게임 종료 로직
-        Debug.Log("게임 종료");
+        // Debug.Log("게임 종료");
         Application.Quit();
     }
     // 옵션 버튼 클릭 시 호출되는 메서드
@@ -38,7 +36,7 @@ public class TitleSceneUI : MonoBehaviour
     {
         // 옵션 설정 로직
         Debug.Log("옵션 설정");
-        SettingPopup.SetActive(true);
+        // settingPopup.SetActive(true);
     }
     #endregion
 }

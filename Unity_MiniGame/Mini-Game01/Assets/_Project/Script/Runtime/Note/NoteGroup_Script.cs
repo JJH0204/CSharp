@@ -1,18 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoteGroup_Script : MonoBehaviour
+public class NoteGroupScript : MonoBehaviour
 {
     [SerializeField] private int nNoteMaxNum = 4;
-    [SerializeField] private GameObject gNotePrefab = null;
-    [SerializeField] private List<Transform> notePosList = null;
-    private List<Note_Script> noteList = null;
+    [SerializeField] private GameObject gNotePrefab;
+    [SerializeField] private List<Transform> notePosList;
+    private List<NoteScript> _noteList;
 
     #region Unity Methods
     void Awake()
     {
-        noteList = new List<Note_Script>();
+        _noteList = new List<NoteScript>();
     }
     void Start()
     {
@@ -26,10 +25,10 @@ public class NoteGroup_Script : MonoBehaviour
     {
         for (int i = 0; i < nNoteMaxNum; i++)
         {
-            GameObject gNoteObj = GameObject.Instantiate(gNotePrefab);
+            var gNoteObj = Instantiate(gNotePrefab, transform);
 
-            noteList.Add(gNoteObj.GetComponent<Note_Script>());
-            noteList[i].SetNotePos(notePosList[i]);
+            _noteList.Add(gNoteObj.GetComponent<NoteScript>());
+            _noteList[i].SetNotePos(notePosList[i]);
         }
     }
     // 위치(index)에 해당하는 노트의 속성 반환 메서드
@@ -40,18 +39,24 @@ public class NoteGroup_Script : MonoBehaviour
             Debug.LogError("Index out of range");
             return NoteType.Apple;
         }
-        return noteList[index].GetNoteType();
+        return _noteList[index].GetNoteType();
     }
     // 노트 처리 메서드
     public void NoteProcess()
     {
-        Destroy(noteList[0].gameObject);
-        noteList.RemoveAt(0);
+        Destroy(_noteList[0].gameObject);
+        _noteList.RemoveAt(0);
         GameObject gNoteObj = GameObject.Instantiate(gNotePrefab);
-        noteList.Add(gNoteObj.GetComponent<Note_Script>());
+        _noteList.Add(gNoteObj.GetComponent<NoteScript>());
         
         for (int i = 0; i < nNoteMaxNum; i++)
-            noteList[i].SetNotePos(notePosList[i]);
+            _noteList[i].SetNotePos(notePosList[i]);
+    }
+    // 노트 그룹 리로드 메서드
+    public void ReLoad()
+    {
+        foreach (var note in _noteList)
+            note.SetRandomNoteType();
     }
     #endregion
 }

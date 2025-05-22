@@ -57,9 +57,9 @@
     <Compile Include="Assets/_Project/Script/Runtime/Manager/LocalDataManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Popup/SettingPopup.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Note/NoteGroup_Script.cs" />
+    <Compile Include="Assets/_Project/Script/Runtime/Note/NoteScript.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/GameManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Popup/EndingPopup.cs" />
-    <Compile Include="Assets/_Project/Script/Runtime/Note/Note_Script.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Config/HistoryData.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/Manager/InputManager.cs" />
     <Compile Include="Assets/_Project/Script/Runtime/UI/ScoreView.cs" />

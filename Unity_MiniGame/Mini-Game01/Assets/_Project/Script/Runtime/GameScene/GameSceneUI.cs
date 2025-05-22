@@ -1,55 +1,52 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 // using UnityEngine.Playables;
 
 public class GameSceneUI : MonoBehaviour
 {
     #region SerializeField
+    
     [Header("GameObjects")]
-    [SerializeField] private GameObject Timer = null; // 타이머 UI 오브젝트
-    [SerializeField] private GameObject Score = null; // 점수 UI 오브젝트
-    [SerializeField] private GameObject Combo = null; // 콤보 UI 오브젝트
+    [FormerlySerializedAs("Timer")] [SerializeField] private GameObject timer; // 타이머 UI 오브젝트
+    [FormerlySerializedAs("Score")] [SerializeField] private GameObject score; // 점수 UI 오브젝트
+    [FormerlySerializedAs("Combo")] [SerializeField] private GameObject combo; // 콤보 UI 오브젝트
     
     [Header("Popup Prefabs")]
-    [SerializeField] private GameObject PausePopupPrefab = null; // 일시정지 팝업
-    [SerializeField] private GameObject EndingPopupPrefab = null; // 게임 종료 팝업
+    [SerializeField] private GameObject pausePopupPrefab; // 일시정지 팝업
+    [FormerlySerializedAs("EndingPopupPrefab")] [SerializeField] private GameObject endingPopupPrefab; // 게임 종료 팝업
     #endregion
 
     #region Cache
     // 캐시된 컴포넌트들
-    private TimeView timeView = null; // 타이머 UI 컴포넌트
-    private ScoreView scoreView = null; // 점수 UI 컴포넌트
-    private ComboView comboView = null; // 콤보 UI 컴포넌트
+    private TimeView _timeView; // 타이머 UI 컴포넌트
+    private ScoreView _scoreView; // 점수 UI 컴포넌트
+    private ComboView _comboView; // 콤보 UI 컴포넌트
     
-    private GameObject EndingPopup;
+    private GameObject _endingPopup;
     #endregion
 
     #region Unity Methods
-    private void Awake()
-    {
 
-    }
     private void Start()
     {
         Init();
     }
+    
     #endregion
 
     #region Custom Methods
     // 게임 UI 초기화 메서드
-    public void Init()
+    private void Init()
     {
         // Debug.Log("GameSceneUI Init() 호출됨");
-        timeView = Timer.GetComponent<TimeView>();
-        scoreView = Score.GetComponent<ScoreView>();
-        comboView = Combo.GetComponent<ComboView>();
+        _timeView = timer.GetComponent<TimeView>();
+        _scoreView = score.GetComponent<ScoreView>();
+        _comboView = combo.GetComponent<ComboView>();
 
-        timeView.Init();
-        scoreView.Init();
-        comboView.Init();
+        _timeView.Init();
+        _scoreView.Init();
+        _comboView.Init();
     }
     // Have 버튼
     public void OnClick_CatchButton()
@@ -64,32 +61,50 @@ public class GameSceneUI : MonoBehaviour
         GameManager.instance.InputProcess(InputType.Throw);
     }
 
-    public void SetScore(int score)
+    public void SetScore(int nScore)
     {
         // Debug.Log("SetScore() 호출됨");
-        scoreView.Score = score;
+        _scoreView.Score = nScore;
     }
-    public void SetCombo(int combo)
+    public void SetCombo(int nCombo)
     {
         // Debug.Log("SetCombo() 호출됨");
-        comboView.Combo = combo;
+        _comboView.Combo = nCombo;
     }
 
     public void SetTime(float time)
     {
         // Debug.Log("SetTime() 호출됨");
-        timeView.StartTimer(time);
+        _timeView.StartTimer(time);
     }
     
-    public void SetEndingPopup(bool isActive, UserData userData, Action onClickRestart, Action onClickGoTitle, Action onClickExit)
+    public void SetEndingPopup(bool isActive, UserData userData)
     {
         // Debug.Log("SetEndingPopup() 호출됨");
-        if (EndingPopupPrefab is not null && EndingPopup is null)
+        if (_endingPopup is null)
         {
-            EndingPopup = Instantiate(EndingPopupPrefab, transform);
-            EndingPopup.SetActive(isActive);
-            EndingPopup.GetComponent<EndingPopup>().SetUserData(userData);
-            EndingPopup.GetComponent<EndingPopup>().SetButtonActions(onClickRestart, onClickGoTitle, onClickExit);
+            if (endingPopupPrefab is not null)
+                _endingPopup = Instantiate(endingPopupPrefab, transform);
+            else
+                Debug.LogError($"{nameof(endingPopupPrefab)} is null");
+        }
+        _endingPopup.SetActive(isActive);
+        _endingPopup.GetComponent<EndingPopup>().SetUserData(userData);
+        
+        // if (endingPopupPrefab is not null && _endingPopup is null)
+        // {
+        //     _endingPopup = Instantiate(endingPopupPrefab, transform);
+        //     _endingPopup.SetActive(isActive);
+        //     _endingPopup.GetComponent<EndingPopup>().SetUserData(userData);
+        // }
+    }
+
+    public void ResetEndingPopup()
+    {
+        if (_endingPopup is not null)
+        {
+            Destroy(_endingPopup.gameObject);
+            _endingPopup = null;
         }
     }
     

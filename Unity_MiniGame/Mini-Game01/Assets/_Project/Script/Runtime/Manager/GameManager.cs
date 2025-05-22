@@ -28,26 +28,26 @@ public class GameManager : ManagerBase
     private float _time;
     private UserData _userData;
     private GameState gameState { get; set; } = GameState.None;
-    private bool _saveHistoryDataJsonFile = false;
+    private bool _saveHistoryDataJsonFile;
     
     #endregion
 
     #region Cache
     
     // private GameObject _objNoteGroup;
-    private NoteGroup_Script _noteGroupScript;
+    private NoteGroupScript _noteGroupScript;
     private GameSceneUI _gameSceneUI;
     
     #endregion
 
     #region Unity Methods
-    void Awake()
+    private void Awake()
     {
         DontDestroy<GameManager>();
         _userData = new UserData();
     }
 
-    void Update()
+    private void Update()
     {
         if (SceneLoadManager.instance.IsSceneGame())
         {
@@ -55,6 +55,10 @@ public class GameManager : ManagerBase
         }
     }
 
+    #endregion
+
+    #region Custom Methods
+    
     private GameState GameProcess(GameState state)
     {
         GameState newState = state;
@@ -92,7 +96,8 @@ public class GameManager : ManagerBase
                 break;
             case GameState.GameOver:
                 // TODO: 게임 오버 팝업의 버튼 클릭에 따라 씬 전환 처리
-                _gameSceneUI.SetEndingPopup(true, _userData, () => { }, () => { }, Application.Quit);
+                // _gameSceneUI.SetEndingPopup(true, _userData, CleanUp(), () => { }, Application.Quit);
+                _gameSceneUI.SetEndingPopup(true, _userData);
                 
                 // TODO: 게임 진행 결과 히스토리 저장
                 if (!_saveHistoryDataJsonFile)
@@ -113,10 +118,7 @@ public class GameManager : ManagerBase
     {
         return _time <= 0;
     }
-
-    #endregion
-
-    #region Custom Methods
+    
     // 게임이 진행중인지를 반환하는 메서드
     public bool IsGamePlaying()
     {
@@ -147,16 +149,28 @@ public class GameManager : ManagerBase
     }
     
     // 게임 재시작 시 기존 인스턴스 삭제
-    public void CleanUp()
+    private void CleanUp()
     {
-        if (gameState != GameState.GameOver)
-            return;
-        
-        if (_noteGroupScript is not null || _gameSceneUI is not null)
+        // Debug.Log("CleanUp() 호출됨");
+        if (gameState != GameState.GameOver) return;
+        _gameSceneUI.ResetEndingPopup();
+        _userData = new UserData();
+        SetScoreComboUI(_userData);
+        _time = LocalDataManager.instance.gameData.TimeLimit;
+
+        // 노트 그룹 오브젝트 초기화
+        if (_noteGroupScript is not null)
         {
-            _noteGroupScript = null;
-            _gameSceneUI = null;
+            _noteGroupScript.ReLoad();
         }
+
+        // Debug.Log("CleanUp() <UNK>");
+    }
+
+    private void SetScoreComboUI(UserData userData)
+    {
+        _gameSceneUI.SetScore(userData.totalScore);
+        _gameSceneUI.SetCombo(userData.currentCombo);
     }
 
     public void InputProcess(InputType inputType)
@@ -239,4 +253,11 @@ public class GameManager : ManagerBase
         }
     }
     #endregion
+
+    public void RestartGame()
+    {
+        Debug.Log("Restarting game...");
+        CleanUp();
+        gameState = GameState.None;
+    }
 }

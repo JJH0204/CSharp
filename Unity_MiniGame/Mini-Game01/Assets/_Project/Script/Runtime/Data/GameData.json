@@ -4,5 +4,5 @@
     "PointApple" : 10,
     "PointGoldApple": 20,
     "PointRottenApple": 50,
-    "TimeLimit" : 10.0
+    "TimeLimit" : 60.0
 }
