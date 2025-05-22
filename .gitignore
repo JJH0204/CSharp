@@ -27,7 +27,7 @@ obj/
 *.userprefs
 # *.csproj
 *.unityproj
-*.asset
+# *.asset
 *.sln
 *.svd
 *.unitypackage
