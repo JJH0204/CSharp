@@ -17,5 +17,5 @@
 - [ ] Setting 팝업 추가
 
 # WebGL
-- [ ] WebGL 빌드 최적화
-- [ ] Unity Play 서비스 연동
+- [x] WebGL 빌드 최적화
+- [x] Unity Play 서비스 연동
