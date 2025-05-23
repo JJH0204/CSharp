@@ -1,4 +1,4 @@
 public static class Config
 {
-    public const string GameDataPath = "Assets/_Project/Script/Runtime/Data/";
+    public const string GameDataPath = "Assets/StreamingAssets/Json/";
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class TitleSceneInit : MonoBehaviour
 {
     #region SerializeField
-    [Header("Title Scene UI")]
-    [SerializeField] private TitleSceneUI titleSceneUI = null;
+    // [Header("Title Scene UI")]
+    // [SerializeField] private TitleSceneUI titleSceneUI = null;
     #endregion
 
     #region Cache

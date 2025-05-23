@@ -61,7 +61,7 @@ public class GameManager : ManagerBase
     
     private GameState GameProcess(GameState state)
     {
-        GameState newState = state;
+        var newState = state;
         // 게임 매니저가 게임 씬에 도달했을 때 처리할 작업
         switch (state)
         {
