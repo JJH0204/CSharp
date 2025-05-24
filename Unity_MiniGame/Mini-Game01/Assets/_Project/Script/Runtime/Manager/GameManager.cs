@@ -37,7 +37,8 @@ public class GameManager : ManagerBase
     // private GameObject _objNoteGroup;
     private NoteGroupScript _noteGroupScript;
     private GameSceneUI _gameSceneUI;
-    
+    private float _pauseTime;
+
     #endregion
 
     #region Unity Methods
@@ -73,8 +74,14 @@ public class GameManager : ManagerBase
                     newState =  GameState.Ready;
                 break;
             case GameState.Ready:
-                // TODO: 게임 시작 전 3초 카운트다운 구현
-                newState = GameState.Playing;
+                // 게임 시작 전 3초 카운트다운
+                if (!_gameSceneUI.IsCountDownOn())
+                    _gameSceneUI.SetCountDown(true);
+                if (_gameSceneUI.IsFinished())
+                {
+                    _gameSceneUI.CountDownOff();
+                    newState = GameState.Playing;
+                }
                 break;
             case GameState.Playing:
                 if (IsGameOver())
@@ -88,14 +95,15 @@ public class GameManager : ManagerBase
 
                 break;
             case GameState.Pause:
-                /// TODO: 게임 일시 정지 기능 구현
-                /// 1. 일시 정지 UI 표시
-                /// 2. 게임 진행 중지
-                /// 3. 일시 정지 해제 기능 구현
+                /// 게임 일시 정지 기능 구현
+                if (_pauseTime == 0)
+                    _pauseTime = _time;
+                _gameSceneUI.SetPausePopup(true);
+                _time = _pauseTime;
 
                 break;
             case GameState.GameOver:
-                // TODO: 게임 오버 팝업의 버튼 클릭에 따라 씬 전환 처리
+                // 게임 오버 팝업의 버튼 클릭에 따라 씬 전환 처리
                 // _gameSceneUI.SetEndingPopup(true, _userData, CleanUp(), () => { }, Application.Quit);
                 _gameSceneUI.SetEndingPopup(true, _userData);
                 
@@ -260,4 +268,19 @@ public class GameManager : ManagerBase
         CleanUp();
         gameState = GameState.None;
     }
+
+    public void KeepGoing()
+    {
+        gameState = GameState.Ready;
+    }
+
+    public void PauseGame()
+    {
+        gameState = GameState.Pause;
+    }
+
+    // public void RunTime()
+    // {
+    //     _time = _pauseTime;
+    // }
 }
